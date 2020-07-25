@@ -56,6 +56,7 @@ module.exports = {
   },
   Mutation: {
     async register(_, { input }, ctx) {
+      console.log('input', input)
       const users = await ctx.Users.findAll();
       const emailTaken = users.some(user => user.email === input.email);
       if (emailTaken) {
@@ -67,6 +68,7 @@ module.exports = {
           ...input,
           password: hashedPassword
         });
+        console.log('newlyCreatedUser', newlyCreatedUser)
         const token = generateToken(newlyCreatedUser);
         // leave out the stored password when returning the user object.
         const {
@@ -100,7 +102,7 @@ module.exports = {
       // The first arg to DeletedUserOrError becomes the returned input value
       return input;
     },
-    updateUserToFree(_, { input }, ctx) {
+    updateUserToExpired(_, { input }, ctx) {
       // The first arg to EditedUserOrError becomes the returned input value
       return input;
     },
@@ -111,7 +113,7 @@ module.exports = {
       return input;
     }
   },
-  UpdateUserToFree: {
+  UpdateUserToExpired: {
     async __resolveType(user, ctx) {
       const theUser = await ctx.Users.findByEmail(user.email);
       const { subscription_id, id } = theUser;
@@ -157,7 +159,7 @@ module.exports = {
         return "DatabankUser";
       } else {
         let error = user;
-        error.message = `problemo with auth stuff`;
+        error.message = `problem with auth stuff`;
         return "Error";
       }
     }
@@ -302,6 +304,7 @@ function generateResetToken(user) {
 }
 
 function generateToken(user) {
+  console.log('generate token',user)
   const payload = {
     id: user.id,
     email: user.email,

@@ -52,7 +52,7 @@ const job = async function() {
         ),
         err => console.error("Error cancelling the subscription", err)
       );
-      subscriber.tier = "FREE";
+      subscriber.tier = "EXPIRED";
       subscriber.subscription_id = "cancelled";
       subscriber.p_next_billing_time = null;
       DatabankUsers.updateById(subscriber.id, subscriber)
