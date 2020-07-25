@@ -42,6 +42,10 @@ const findLanceData = () => {
    return db("platform_sessions");
 }
 
+const getDataBankUsers = () => {
+   return db('databank_users');
+}
+
 // **************** These two functions run every 24 hours on heroku, to delete, and reparse the traders, and sessions **************** 
 // A batch insert into the the table of your choosing
 // Used for when you have 500+ entries to put into database at once
@@ -64,5 +68,6 @@ module.exports = {
    findLanceData,
    batchInsert,
    truncateTable,
-   getDataSessions
+   getDataSessions,
+   getDataBankUsers
 }
