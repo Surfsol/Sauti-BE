@@ -1,9 +1,10 @@
 const {
   products,
-  markets,
+  //markets,
   categories,
   procedureComm
 } = require("./dictionary.js");
+const {markets} = require("./marketNames")
 
 // ==== SEE BOTTOM OF FILE BEFORE RUNNING ====
 // To run the file during testing, run: node ./models/sessionsDataParser.js
@@ -49,6 +50,7 @@ module.exports = function dictionaryParcer(data) {
         Object.entries(markets).forEach(marketEntry => {
           if (obj[entry[0]] === marketEntry[0]) {
             obj[entry[0]] = marketEntry[1];
+            console.log(obj[entry[0]])
           }
         });
       } // normalizes the market entries against the ditionary
