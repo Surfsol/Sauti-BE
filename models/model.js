@@ -43,7 +43,7 @@ const findLanceData = () => {
 }
 
 const getDataBankUsers = () => {
-   return db('databank_users');
+   return db('databank_users_tier');
 }
 
 // **************** These two functions run every 24 hours on heroku, to delete, and reparse the traders, and sessions **************** 

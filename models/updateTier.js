@@ -2,9 +2,7 @@ require("dotenv").config();
 
 const db = require("./model");
 
-const today = new Date();
 
-fullDaysSinceEpoch = Math.floor(today / 8.64e7);
 
 function addDays(date, days) {
   const copy = new Date(Number(date));
