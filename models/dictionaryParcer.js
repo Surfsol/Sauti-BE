@@ -1,10 +1,9 @@
 const {
-  products,
-  //markets,
   categories,
   procedureComm
 } = require("./dictionary.js");
 const {markets} = require("./marketNames")
+const {products} = require("./productNames")
 
 // ==== SEE BOTTOM OF FILE BEFORE RUNNING ====
 // To run the file during testing, run: node ./models/sessionsDataParser.js

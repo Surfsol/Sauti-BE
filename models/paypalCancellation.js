@@ -80,8 +80,8 @@ async function getAuthCreds() {
   };
 
   const auth = {
-    username: `AeMzQ9LYW7d4_DAzYdeegCYOCdsIDuI0nWfno1vGi4tsKp5VBQq893hDSU6FIn47md30k4jC5QDq33xM`,
-    password: `ECeUwnnTkSqjK6NIycSLp8joMLgOpof1rQdA4W8NvHqgKQNuNqwgySgGEJr_fq_JFHtzM6Je9Kj8fClA`
+    username: process.env.paypalUserName,
+    password: process.env.paypalPassword
   };
 
   const options = {
