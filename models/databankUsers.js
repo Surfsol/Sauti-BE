@@ -12,46 +12,46 @@ module.exports = {
 };
 
 function findAll() {
-  return db("databank_users");
+  return db("databank_users_tier");
 }
 
 function findOne(filter) {
-  return db("databank_users")
+  return db("databank_users_tier")
     .where(filter)
     .first();
 }
 
 function findBy(filter) {
-  return db("databank_users").where(filter);
+  return db("databank_users_tier").where(filter);
 }
 
 function findByEmail(email) {
-  return db("databank_users")
+  return db("databank_users_tier")
     .where({ email })
     .first();
 }
 
 function create(user) {
-  return db("databank_users")
+  return db("databank_users_tier")
     .insert(user)
     .then(([id]) => findBy({ id }))
     .catch(err => console.log(err));
 }
 
 function updateById(id, body) {
-  return db("databank_users")
+  return db("databank_users_tier")
     .where({ id })
     .update(body);
 }
 
 function removeById(id) {
-  return db("databank_users")
+  return db("databank_users_tier")
     .where({ id })
     .delete();
 }
 
 function removeByEmail(email) {
-  return db("databank_users")
+  return db("databank_users_tier")
     .where({ email })
     .delete();
 }

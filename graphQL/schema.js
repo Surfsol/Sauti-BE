@@ -70,6 +70,7 @@ const typeDefs = gql`
   }
 
   enum UserTier {
+    EXPIRED
     FREE
     PAID
     ADMIN
@@ -89,7 +90,7 @@ const typeDefs = gql`
 
   union EditedUserOrError = DatabankUser | Error
   union DeletedUserOrError = DatabankUser | Error
-  union UpdateUserToFree = DatabankUser | Error
+  union UpdateUserToExpired = DatabankUser | Error
   union AddPaypalPlanOrError = DatabankUser | Error
   union ResetPasswordOrError = DatabankUser | Error
 
@@ -144,7 +145,7 @@ const typeDefs = gql`
     subscription_id: String
   }
 
-  input newUpdateUserToFreeInput {
+  input newUpdateUserToExpiredInput {
     id: Int
     email: String!
     subscription_id: String
@@ -199,7 +200,7 @@ const typeDefs = gql`
     login(input: newLoginInput!): DatabankUser!
     editUser(input: newEditUserInput!): EditedUserOrError!
     deleteUser(input: newDeleteUserInput!): DeletedUserOrError!
-    updateUserToFree(input: newUpdateUserToFreeInput!): UpdateUserToFree!
+    updateUserToExpired(input: newUpdateUserToExpiredInput!): UpdateUserToExpired!
     addPaypalPlan(input: newAddPaypalPlanInput!): AddPaypalPlanOrError!
     sendResetPassword(input: resetPasswordInput!): ResetPasswordOrError!
   }

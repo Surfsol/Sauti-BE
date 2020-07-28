@@ -3,10 +3,10 @@ const DatabankUsers = require("../models/databankUsers");
 const qs = require("qs");
 
 // This cron job checks all users that have deleted their subscriptions.
-// If thier subscription period is equal to the current date, this cron job will revert their account back to free.
+// If thier subscription period is equal to the current date, this cron job will revert their account back to expired.
 const job = async function() {
   console.log("This cron job will run every 4 hours.");
-  // When the user cancels their subscription through our app, we set thte p_next_billing_time field
+  // When the user cancels their subscription through our app, we set the p_next_billing_time field
   // to their next billing date. If this field is null, it means that the user hasn't cancelled their subsription.
   const cancelledSubs = (await DatabankUsers.findAll()).filter(
     user => user.p_next_billing_time !== null
@@ -22,7 +22,7 @@ const job = async function() {
     if (tokenCache == null) {
       tokenCache = await getBearerToken();
     }
-    // retrieve the next billing time for the subscriber who canelled their account (as it stands, it's set for the same day
+    // retrieve the next billing time for the subscriber who cancelled their account (as it stands, it's set for the same day
     // they cancelled it).
     let {
       data: {
@@ -52,7 +52,7 @@ const job = async function() {
         ),
         err => console.error("Error cancelling the subscription", err)
       );
-      subscriber.tier = "FREE";
+      subscriber.tier = "EXPIRED";
       subscriber.subscription_id = "cancelled";
       subscriber.p_next_billing_time = null;
       DatabankUsers.updateById(subscriber.id, subscriber)
@@ -80,8 +80,8 @@ async function getAuthCreds() {
   };
 
   const auth = {
-    username: `AeMzQ9LYW7d4_DAzYdeegCYOCdsIDuI0nWfno1vGi4tsKp5VBQq893hDSU6FIn47md30k4jC5QDq33xM`,
-    password: `ECeUwnnTkSqjK6NIycSLp8joMLgOpof1rQdA4W8NvHqgKQNuNqwgySgGEJr_fq_JFHtzM6Je9Kj8fClA`
+    username: process.env.paypalUserName,
+    password: process.env.paypalPassword
   };
 
   const options = {

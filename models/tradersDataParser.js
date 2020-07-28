@@ -90,37 +90,37 @@ try {
       if (element.data.includes("10-20")) {
         arrayWithAge.map(user => {
           if (user.cell_num === num) {
-            user.age = "10-20";
+            user.age = "<20";
           }
         });
       } else if (element.data.includes("20-30")) {
         arrayWithAge.map(user => {
           if (user.cell_num === num) {
-            user.age = "20-30";
+            user.age = "21-30";
           }
         });
       } else if (element.data.includes("30-40")) {
         arrayWithAge.map(user => {
           if (user.cell_num === num) {
-            user.age = "30-40";
+            user.age = "31-40";
           }
         });
       } else if (element.data.includes("40-50")) {
         arrayWithAge.map(user => {
           if (user.cell_num === num) {
-            user.age = "40-50";
+            user.age = "41-50";
           }
         });
       } else if (element.data.includes("50-60")) {
         arrayWithAge.map(user => {
           if (user.cell_num === num) {
-            user.age = "50-60";
+            user.age = "51-60";
           }
         });
       } else if (element.data.includes("60-70")) {
         arrayWithAge.map(user => {
           if (user.cell_num === num) {
-            user.age = "60-70";
+            user.age = ">60";
           }
         });
       }
