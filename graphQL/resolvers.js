@@ -56,7 +56,7 @@ module.exports = {
   },
   Mutation: {
     async register(_, { input }, ctx) {
-      console.log('input', input)
+      console.log("input", input);
       const users = await ctx.Users.findAll();
       const emailTaken = users.some(user => user.email === input.email);
       if (emailTaken) {
@@ -68,7 +68,7 @@ module.exports = {
           ...input,
           password: hashedPassword
         });
-        console.log('newlyCreatedUser', newlyCreatedUser)
+        console.log("newlyCreatedUser", newlyCreatedUser);
         const token = generateToken(newlyCreatedUser);
         // leave out the stored password when returning the user object.
         const {
@@ -122,8 +122,8 @@ module.exports = {
         grant_type: "client_credentials"
       };
       const auth = {
-        username: `AeMzQ9LYW7d4_DAzYdeegCYOCdsIDuI0nWfno1vGi4tsKp5VBQq893hDSU6FIn47md30k4jC5QDq33xM`,
-        password: `ECeUwnnTkSqjK6NIycSLp8joMLgOpof1rQdA4W8NvHqgKQNuNqwgySgGEJr_fq_JFHtzM6Je9Kj8fClA`
+        username: process.env.paypalUserName,
+        password: process.env.paypalPassword
       };
       const options = {
         method: "post",
@@ -204,8 +204,8 @@ module.exports = {
         grant_type: "client_credentials"
       };
       const auth = {
-        username: `AeMzQ9LYW7d4_DAzYdeegCYOCdsIDuI0nWfno1vGi4tsKp5VBQq893hDSU6FIn47md30k4jC5QDq33xM`,
-        password: `ECeUwnnTkSqjK6NIycSLp8joMLgOpof1rQdA4W8NvHqgKQNuNqwgySgGEJr_fq_JFHtzM6Je9Kj8fClA`
+        username: process.env.PAYPAL_AUTH_USERNAME,
+        password: process.env.PAYPAL_AUTH_SECRET
       };
 
       // username: `${process.env.PAYPAL_AUTH_USERNAME}`,
@@ -304,7 +304,7 @@ function generateResetToken(user) {
 }
 
 function generateToken(user) {
-  console.log('generate token',user)
+  console.log("generate token", user);
   const payload = {
     id: user.id,
     email: user.email,
