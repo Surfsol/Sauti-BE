@@ -49,7 +49,7 @@ module.exports = function dictionaryParcer(data) {
         Object.entries(markets).forEach(marketEntry => {
           if (obj[entry[0]] === marketEntry[0]) {
             obj[entry[0]] = marketEntry[1];
-            console.log(obj[entry[0]])
+            // console.log(obj[entry[0]])
           }
         });
       } // normalizes the market entries against the ditionary
