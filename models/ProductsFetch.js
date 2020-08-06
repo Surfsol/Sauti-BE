@@ -15,7 +15,7 @@ let productNames = async () => {
     let data = await response.json();
     data = JSON.stringify(data);
     let file = "module.exports = {products :" + data + "}";
-    fs.writeFile("models/productNames.js", file, function (err) {
+    fs.writeFile("models/testproductNames.js", file, function (err) {
       if (err) throw err;
       console.log("saved");
     });
