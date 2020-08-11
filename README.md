@@ -1,6 +1,6 @@
 # API Documentation
 
-#### Backend deployed on [Heroku](https://sauti-databank.herokuapp.com/). <br>
+#### Backend deployed on [Heroku](https://agile-island-21331.herokuapp.com/). <br>
 
 ## Getting started
 
