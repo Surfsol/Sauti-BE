@@ -14,7 +14,7 @@ let marketNames = async () => {
   } else {
     let data = await response.json();
     data = JSON.stringify(data);
-    let file = "module.exports = {markets :" + data + "}";
+    let file = "module.exports = {markets test ran :" + data + "}";
     fs.writeFile("models/test.js", file, function (err) {
       if (err) throw err;
       console.log("saved");
