@@ -8,6 +8,8 @@ const Traders = require("./models/model");
 const Users = require("./models/databankUsers");
 const cors = require("cors");
 const morgan = require("morgan");
+const cron = require('./cron')
+const cronMarkets=require('./cronMarkets')
 
 const server = new ApolloServer({
   helmet,
