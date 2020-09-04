@@ -4,7 +4,8 @@ const { JWT_SECRET: secret } = require("../config/secrets");
 const { JWT_SECRET_RESET: reset_secret } = require("../config/secrets");
 const axios = require("axios");
 const qs = require("qs");
-const { sendResetPasswordEmail } = require("../services/EmailService");
+const { sendResetPasswordEmail, contactEmail } = require("../services/EmailService");
+const nodemailer = require("nodemailer");
 
 module.exports = {
   Query: {
@@ -111,7 +112,64 @@ module.exports = {
     },
     sendResetPassword(_, { input }, ctx) {
       return input;
-    }
+    },
+    async emailByContact(_, { input }, ctx) {
+      console.log("email input", input);
+      contactEmail(input)
+      }
+    
+      // const output = `
+      //     <p>You have a new contact request</p>
+      //     <h3>Contact Details</h3>
+      //     <ul>  
+      //       <li>Name: ${input.name}</li>
+      //       <li>Email: ${input.email}</li>
+      //     </ul>
+      //     <h3>Message</h3>
+      //     <p>${input.message}</p>
+      //   `;
+      // let transporter = nodemailer.createTransport({
+      //   host: "smtp.gmail.com",
+      //   port: 587,
+      //   secure: false, // USE TLS
+      //   auth: {
+      //     user: `tradeinsights.sautiafrica@gmail.com`,
+      //     pass: `SautiAfrica2016`
+      //   }
+      // });
+      // console.log("transporter", transporter);
+      // let mailOptions = {
+      //   from: process.env.EMAILFROM,
+      //   to: process.env.EMAILTO,
+      //   subject: "respond mail",
+      //   text: "text",
+      //   html: output //variable from above
+      // };
+      // transporter.verify(function (error, success) {
+      //   if (error) {
+      //     console.log(
+      //       "transporterrrrrrrrrr not verifiedddddddddddddddd",
+      //       error
+      //     );
+      //     return error;
+      //   } else {
+      //     console.log("Server is ready to take our messages");
+      //   }
+      // });
+    //   console.log("mailOptions", mailOptions);
+    //   transporter.sendMail(mailOptions, (err, info) => {
+    //     console.log("err", err, "info", info);
+    //     if (err) {
+    //       console.log("Error occured." + err.message);
+    //       return "Error occured." + err.message;
+    //     }
+
+    //     console.log("Message sent: %s", info.messageId);
+    //     console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+
+    //     return "message sent";
+    //   });
+    // }
   },
   UpdateUserToExpired: {
     async __resolveType(user, ctx) {
@@ -208,9 +266,6 @@ module.exports = {
         password: process.env.PAYPAL_AUTH_SECRET
       };
 
-      // username: `${process.env.PAYPAL_AUTH_USERNAME}`,
-      // password: `${process.env.PAYPAL_AUTH_SECRET}`
-
       const options = {
         method: "post",
         headers: {
@@ -261,11 +316,9 @@ module.exports = {
     async __resolveType(user, ctx) {
       const theUser = await ctx.Users.findByEmail(user.email);
       const { id } = theUser;
-
       // generating token that expires in 1 hour for the password URL + the token needs to have current user email on it
       const resetTokenGeneration = generateResetToken(theUser);
       const url = `https://www.databank.sautiafrica.org/password-verification/?resetToken=${resetTokenGeneration}`;
-
       if (theUser) {
         // if user exists
         // this generates 5 random numbers
@@ -274,7 +327,7 @@ module.exports = {
         theUser.verification_code = generateNumber;
         // saving reset token to DB
         theUser.resetToken = resetTokenGeneration;
-        await ctx.Users.updateById(id, theUser);
+        ctx.Users.updateById(id, theUser);
         await sendResetPasswordEmail(theUser, generateNumber, url);
         return "DatabankUser";
       } else {

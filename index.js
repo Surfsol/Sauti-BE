@@ -13,10 +13,5 @@ cron.schedule('0 * * * *', async function(){
     }
 })
 
-// cron.schedule('0 * * * *', async function(){
-//     console.log('scheduler tradersData running')
-//     shell.exec("node ./models/tradersDataParser.js").code
- 
-// })
 
 app.listen(port, () => console.log(`🚀 Server ready at ${port}`));
