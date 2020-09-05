@@ -1,9 +1,6 @@
-const {
-  categories,
-  procedureComm
-} = require("./dictionary.js");
-const {markets} = require("./marketNames")
-const {products} = require("./productNames")
+const { categories, procedureComm } = require("./dictionary.js");
+const { markets } = require("./marketNames");
+const { products } = require("./productNames");
 
 // ==== SEE BOTTOM OF FILE BEFORE RUNNING ====
 // To run the file during testing, run: node ./models/sessionsDataParser.js
@@ -13,7 +10,7 @@ module.exports = function dictionaryParcer(data) {
   //   data = mockObject;
 
   translatedData = [];
-  
+
   data.forEach(obj => {
     Object.entries(obj).forEach(entry => {
       if (
@@ -27,31 +24,27 @@ module.exports = function dictionaryParcer(data) {
         obj[entry[0]] = toCaps(entry[1]);
       } //this will capitalize the first letter of each word of select props (these are the only 5 needed for changes)
 
-      if (typeof entry[1] === "string" && entry[0] === "commodityproduct") {
-        Object.entries(products).forEach(productEntry => {
-          if (obj[entry[0]] === productEntry[0]) {
-            obj[entry[0]] = productEntry[1];
-          }
-        });
-      } // will run translations and corections for products against the dictionary
+      if (entry[0] === "commodityproduct") {
+        if (products[entry[1]]) {
+          obj[entry[0]] = products[entry[1]];
+        } else {
+          obj[entry[0]] = undefined;
+        }
+      }
+      // will run translations and corections for products against the dictionary
 
-      if (
-        typeof entry[1] === "string" &&
-        (entry[0] === "proceduredest")
-      ) {
-        
+      if (typeof entry[1] === "string" && entry[0] === "proceduredest") {
         if (entry[1].includes("->")) {
           obj[entry[0]] = destFormat(entry[1]);
         }
-      }// removes the arrow from proceduredest and exchange direction
+      } // removes the arrow from proceduredest and exchange direction
 
-      if (typeof entry[1] === "string" && entry[0] === "commoditymarket") {
-        Object.entries(markets).forEach(marketEntry => {
-          if (obj[entry[0]] === marketEntry[0]) {
-            obj[entry[0]] = marketEntry[1];
-            // console.log(obj[entry[0]])
-          }
-        });
+      if (entry[0] === "commoditymarket") {
+        if (markets[entry[1]]) {
+          obj[entry[0]] = markets[entry[1]];
+        } else {
+          obj[entry[0]] = undefined;
+        }
       } // normalizes the market entries against the ditionary
 
       if (typeof entry[1] === "string" && entry[0] === "commoditycat") {
@@ -99,8 +92,7 @@ module.exports = function dictionaryParcer(data) {
         !entry[1].includes("->")
       ) {
         obj.proceduredest = undefined;
-      }//checks if the entry type in proceeduredest is valid
-
+      } //checks if the entry type in proceeduredest is valid
     });
     translatedData.push(obj);
   });
@@ -113,7 +105,7 @@ function toCaps(str) {
 
   if (/ market/.test(str)) {
     str = str.replace(" market", "");
-  }// Removes the word market wherever it appears so the values are the same (i.e. Busia Market becomes Busia)
+  } // Removes the word market wherever it appears so the values are the same (i.e. Busia Market becomes Busia)
 
   var splitStr = str.split(" ");
   for (var i = 0; i < splitStr.length; i++) {
@@ -132,7 +124,7 @@ function destFormat(str) {
     str = str.split("->")[1];
     return str;
   }
-}//removes the arrows
+} //removes the arrows
 
 //You can uncomment and use this mock object for testing.
 // const mockObject = [
