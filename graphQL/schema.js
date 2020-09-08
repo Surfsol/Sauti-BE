@@ -217,7 +217,7 @@ const typeDefs = gql`
     updateUserToExpired(input: newUpdateUserToExpiredInput!): UpdateUserToExpired!
     addPaypalPlan(input: newAddPaypalPlanInput!): AddPaypalPlanOrError!
     sendResetPassword(input: resetPasswordInput!): ResetPasswordOrError!
-    emailByContact(input: emailContactInput!): NodeEmail!
+    emailByContact(input: emailContactInput!): NodeEmail
   }
 `;
 

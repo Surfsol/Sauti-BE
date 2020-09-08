@@ -1,32 +1,15 @@
 const nodemailer = require("nodemailer");
-//Error: Invalid login: 535-5.7.8 Username and Password not accepted. Learn more at
-//535 5.7.8  https://support.google.com/mail/?p=BadCredentials e24sm4013757qka.76 - gsmtp
-// let transporter = nodemailer.createTransport({
-//   host: 'smtp.gmail.com',
-//   port: 465,
-//   secure: true, 
-//   auth: {
-//     user: 'tradeinsights.sautiafrica@gmail.com',
-//     pass: 'SautiAfrica2016'
-//   }
-// });
-
-
-  let transporter = nodemailer.createTransport({
-      host: "127.0.0.1",
-      port: 1025,
-      secure: false, // true for 465, false for other ports
-      auth: {
-        user: "sautiafrica@protonmail.com", 
-        pass: "SautiAfrica2016"
-      }, 
-      tls: {
-          rejectUnauthorized: false
-      }
-    });
+let transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true, 
+  auth: {
+    user: process.env.EMAILFROM,
+    pass: process.env.PASSWORDFROM
+  }
+});
 
 const sendResetPasswordEmail = (user, code, url) => {
-  console.log("console sendResetPaassssssss user, code", user, code);
   transporter.sendMail({
     from: "Databank Sauti Africa <tradeinsights.sautiafrica@gmail.com>",
     to: `${user.email}`,
@@ -37,6 +20,7 @@ const sendResetPasswordEmail = (user, code, url) => {
 };
 
 const contactEmail = input => {
+  console.log('in contactEmail')
   const output = `
           <p>You have a new contact request</p>
           <h3>Contact Details</h3>
@@ -56,20 +40,13 @@ const contactEmail = input => {
   };
   transporter.verify(function (error, success) {
     if (error) {
-      console.log(
-        "transporterrrrrrrrrr not verifiedddddddddddddddd",
-        error
-      );
       return error;
     } else {
       console.log("Server is ready to take our messages");
     }
   });
-  console.log("mailOptions", mailOptions);
   transporter.sendMail(mailOptions, (err, info) => {
-    console.log("err", err, "info", info);
     if (err) {
-      console.log("Error occured." + err.message);
       return "Error occured." + err.message;
     }
 

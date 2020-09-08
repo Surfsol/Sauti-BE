@@ -114,62 +114,8 @@ module.exports = {
       return input;
     },
     async emailByContact(_, { input }, ctx) {
-      console.log("email input", input);
-      contactEmail(input)
+      return contactEmail(input)
       }
-    
-      // const output = `
-      //     <p>You have a new contact request</p>
-      //     <h3>Contact Details</h3>
-      //     <ul>  
-      //       <li>Name: ${input.name}</li>
-      //       <li>Email: ${input.email}</li>
-      //     </ul>
-      //     <h3>Message</h3>
-      //     <p>${input.message}</p>
-      //   `;
-      // let transporter = nodemailer.createTransport({
-      //   host: "smtp.gmail.com",
-      //   port: 587,
-      //   secure: false, // USE TLS
-      //   auth: {
-      //     user: `tradeinsights.sautiafrica@gmail.com`,
-      //     pass: `SautiAfrica2016`
-      //   }
-      // });
-      // console.log("transporter", transporter);
-      // let mailOptions = {
-      //   from: process.env.EMAILFROM,
-      //   to: process.env.EMAILTO,
-      //   subject: "respond mail",
-      //   text: "text",
-      //   html: output //variable from above
-      // };
-      // transporter.verify(function (error, success) {
-      //   if (error) {
-      //     console.log(
-      //       "transporterrrrrrrrrr not verifiedddddddddddddddd",
-      //       error
-      //     );
-      //     return error;
-      //   } else {
-      //     console.log("Server is ready to take our messages");
-      //   }
-      // });
-    //   console.log("mailOptions", mailOptions);
-    //   transporter.sendMail(mailOptions, (err, info) => {
-    //     console.log("err", err, "info", info);
-    //     if (err) {
-    //       console.log("Error occured." + err.message);
-    //       return "Error occured." + err.message;
-    //     }
-
-    //     console.log("Message sent: %s", info.messageId);
-    //     console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-
-    //     return "message sent";
-    //   });
-    // }
   },
   UpdateUserToExpired: {
     async __resolveType(user, ctx) {
