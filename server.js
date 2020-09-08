@@ -6,6 +6,7 @@ const typeDefs = require("./graphQL/schema");
 const resolvers = require("./graphQL/resolvers");
 const Traders = require("./models/model");
 const Users = require("./models/databankUsers");
+const CatLabels = require('./models/graphLabels')
 const cors = require("cors");
 const morgan = require("morgan");
 const cron = require('./cron')
@@ -17,7 +18,7 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   context() {
-    return { Traders, Users };
+    return { Traders, Users, CatLabels };
   },
   introspection: true,
   playground: true

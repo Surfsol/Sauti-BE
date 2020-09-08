@@ -5,7 +5,7 @@ const { JWT_SECRET_RESET: reset_secret } = require("../config/secrets");
 const axios = require("axios");
 const qs = require("qs");
 const { sendResetPasswordEmail, contactEmail } = require("../services/EmailService");
-const nodemailer = require("nodemailer");
+
 
 module.exports = {
   Query: {
@@ -53,6 +53,9 @@ module.exports = {
 
     databankUser(_, args, ctx) {
       return ctx.Users.findOne({ email: args.input.email });
+    },
+    getGraphLabels(_, args, ctx){
+      return ctx.CatLabels.all()
     }
   },
   Mutation: {
