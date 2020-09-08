@@ -114,6 +114,7 @@ module.exports = {
       return input;
     },
     async emailByContact(_, { input }, ctx) {
+      console.log(input)
       return contactEmail(input)
       }
   },
