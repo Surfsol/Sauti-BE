@@ -62,6 +62,12 @@ const typeDefs = gql`
     resetToken: String
   }
 
+  type NodeEmail {
+    name: String
+    email: String
+    message: String
+  }
+
   enum FoundBy {
     CROSS_BORDER_ASSOCIATION
     UNIVERSITY
@@ -93,6 +99,14 @@ const typeDefs = gql`
   union UpdateUserToExpired = DatabankUser | Error
   union AddPaypalPlanOrError = DatabankUser | Error
   union ResetPasswordOrError = DatabankUser | Error
+
+  
+
+  input emailContactInput {
+    name: String
+    email: String
+    message: String
+  }
 
   input newTraderInput {
     id: Int
@@ -203,6 +217,7 @@ const typeDefs = gql`
     updateUserToExpired(input: newUpdateUserToExpiredInput!): UpdateUserToExpired!
     addPaypalPlan(input: newAddPaypalPlanInput!): AddPaypalPlanOrError!
     sendResetPassword(input: resetPasswordInput!): ResetPasswordOrError!
+    emailByContact(input: emailContactInput!): NodeEmail
   }
 `;
 

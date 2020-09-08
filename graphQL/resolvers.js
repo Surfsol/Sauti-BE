@@ -4,7 +4,8 @@ const { JWT_SECRET: secret } = require("../config/secrets");
 const { JWT_SECRET_RESET: reset_secret } = require("../config/secrets");
 const axios = require("axios");
 const qs = require("qs");
-const { sendResetPasswordEmail } = require("../services/EmailService");
+const { sendResetPasswordEmail, contactEmail } = require("../services/EmailService");
+const nodemailer = require("nodemailer");
 
 module.exports = {
   Query: {
@@ -111,7 +112,10 @@ module.exports = {
     },
     sendResetPassword(_, { input }, ctx) {
       return input;
-    }
+    },
+    async emailByContact(_, { input }, ctx) {
+      return contactEmail(input)
+      }
   },
   UpdateUserToExpired: {
     async __resolveType(user, ctx) {
@@ -208,9 +212,6 @@ module.exports = {
         password: process.env.PAYPAL_AUTH_SECRET
       };
 
-      // username: `${process.env.PAYPAL_AUTH_USERNAME}`,
-      // password: `${process.env.PAYPAL_AUTH_SECRET}`
-
       const options = {
         method: "post",
         headers: {
@@ -261,11 +262,9 @@ module.exports = {
     async __resolveType(user, ctx) {
       const theUser = await ctx.Users.findByEmail(user.email);
       const { id } = theUser;
-
       // generating token that expires in 1 hour for the password URL + the token needs to have current user email on it
       const resetTokenGeneration = generateResetToken(theUser);
       const url = `https://www.databank.sautiafrica.org/password-verification/?resetToken=${resetTokenGeneration}`;
-
       if (theUser) {
         // if user exists
         // this generates 5 random numbers
@@ -274,7 +273,7 @@ module.exports = {
         theUser.verification_code = generateNumber;
         // saving reset token to DB
         theUser.resetToken = resetTokenGeneration;
-        await ctx.Users.updateById(id, theUser);
+        ctx.Users.updateById(id, theUser);
         await sendResetPasswordEmail(theUser, generateNumber, url);
         return "DatabankUser";
       } else {

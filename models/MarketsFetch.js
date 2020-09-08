@@ -1,12 +1,12 @@
 const fetch = require("node-fetch");
 const fs = require("fs");
-
+//get market names from Lance's site and write them to marketNames.js
 let url =
   "http://sautiafrica.org/queryengine/apis/assets/dictionaries.php?api=1&data=markets";
 
 let settings = { method: "Get" };
 
-let data;
+
 let marketNames = async () => {
   let response = await fetch(url, settings);
   if (!response.ok) {
