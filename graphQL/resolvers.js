@@ -5,7 +5,7 @@ const { JWT_SECRET_RESET: reset_secret } = require("../config/secrets");
 const axios = require("axios");
 const qs = require("qs");
 const { sendResetPasswordEmail, contactEmail } = require("../services/EmailService");
-const nodemailer = require("nodemailer");
+
 
 module.exports = {
   Query: {
@@ -53,6 +53,9 @@ module.exports = {
 
     databankUser(_, args, ctx) {
       return ctx.Users.findOne({ email: args.input.email });
+    },
+    getGraphLabels(_, args, ctx){
+      return ctx.CatLabels.all()
     }
   },
   Mutation: {
@@ -69,7 +72,6 @@ module.exports = {
           ...input,
           password: hashedPassword
         });
-        console.log("newlyCreatedUser", newlyCreatedUser);
         const token = generateToken(newlyCreatedUser);
         // leave out the stored password when returning the user object.
         const {
@@ -114,7 +116,6 @@ module.exports = {
       return input;
     },
     async emailByContact(_, { input }, ctx) {
-      console.log(input)
       return contactEmail(input)
       }
   },
@@ -175,7 +176,6 @@ module.exports = {
         user.password = bcrypt.hashSync(user.password, 8);
       }
       const updated = await ctx.Users.updateById(user.id, user);
-      console.log("edit");
       if (updated) {
         return "DatabankUser";
       } else {
@@ -201,8 +201,6 @@ module.exports = {
     async __resolveType(user, ctx) {
       const theUser = await ctx.Users.findByEmail(user.email);
       const { subscription_id, id } = theUser;
-
-      console.log(theUser, "THE USER");
 
       const url = "https://api.sandbox.paypal.com/v1/oauth2/token";
       const oldData = {
@@ -245,7 +243,6 @@ module.exports = {
           `https://api.sandbox.paypal.com/v1/billing/plans/${userPlanID}`
         );
         const planIDName = users_planIdInformation.data.name;
-        console.log(planIDName, "PLAN ID NAME");
         // Adding plan id name into the DB
 
         theUser.paypal_plan = planIDName;
@@ -304,7 +301,6 @@ function generateResetToken(user) {
 }
 
 function generateToken(user) {
-  console.log("generate token", user);
   const payload = {
     id: user.id,
     email: user.email,

@@ -2,7 +2,7 @@ const { gql } = require("apollo-server");
 
 const typeDefs = gql`
   scalar Date
-
+  scalar JSON
   type TraderUser {
     id: Int
     gender: String
@@ -67,6 +67,8 @@ const typeDefs = gql`
     email: String
     message: String
   }
+
+
 
   enum FoundBy {
     CROSS_BORDER_ASSOCIATION
@@ -207,6 +209,8 @@ const typeDefs = gql`
     sessionsData(input: newTraderSessionInput): [TraderSession]!
     databankUsers: [DatabankUser]!
     databankUser(input: Email!): DatabankUser!
+    getGraphLabels: JSON
+    
   }
 
   type Mutation {
