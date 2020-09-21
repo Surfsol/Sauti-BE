@@ -43,3 +43,17 @@ lambda function
 Heroku - would have to use my credit card for scheduler.
 
 Paypal - see PAYPAL_AUTH_USERNAME, and paypalUserName
+
+
+differences
+commoditycat
+"proceduredest"
+
+From dictionary
+"commodityproduct"
+"commoditymarket"
+"procedurerequireddocument"
+"procedurerelevantagency"
+
+
+Cauliflower

@@ -14,7 +14,7 @@ module.exports = {
     useNullAsDefault: true,
     pool: {
       min: 2,
-      max: 1000
+      max: 10
     }
   },
 

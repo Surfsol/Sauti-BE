@@ -1,6 +1,8 @@
 const { categories, procedureComm } = require("./dictionary.js");
 const { markets } = require("./marketNames");
 const { products } = require("./productNames");
+const {catOrder} = require('./graphLabels.js')
+
 
 // ==== SEE BOTTOM OF FILE BEFORE RUNNING ====
 // To run the file during testing, run: node ./models/sessionsDataParser.js
@@ -12,6 +14,7 @@ module.exports = function dictionaryParcer(data) {
   translatedData = [];
 
   data.forEach(obj => {
+   
     Object.entries(obj).forEach(entry => {
       if (
         typeof entry[1] === "string" &&
@@ -45,23 +48,20 @@ module.exports = function dictionaryParcer(data) {
         } else {
           obj[entry[0]] = undefined;
         }
-      } // normalizes the market entries against the ditionary
+      } // normalizes the market entries against the dictionary
 
       if (typeof entry[1] === "string" && entry[0] === "commoditycat") {
+        //console.log(categories)
         Object.entries(categories).forEach(category => {
           if (obj[entry[0]] === category[0]) {
             obj[entry[0]] = category[1];
           }
         });
       } //normilizes commoditycategories against the dictionary
-
-      if (typeof entry[1] === "string" && entry[0] === "procedurecommodity") {
-        Object.entries(procedureComm).forEach(commodity => {
-          if (obj[entry[0]] === commodity[0]) {
+      
+      if (entry[0] === "procedurecommodity"  && catOrder.procedurecommodity.labels.includes(entry[1])) {
             obj[entry[0]] = commodity[1];
           }
-        });
-      } //normilizes proceedureCommodities against the dictionary
 
       if (typeof entry[1] === "string" && entry[0] === "commodityproduct") {
         const productArray = [];
