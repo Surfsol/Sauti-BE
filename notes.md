@@ -46,14 +46,16 @@ Paypal - see PAYPAL_AUTH_USERNAME, and paypalUserName
 
 
 differences
-commoditycat
+
 "proceduredest"
 
 From dictionary
+Finished:
 "commodityproduct"
 "commoditymarket"
 "procedurerequireddocument"
 "procedurerelevantagency"
+commoditycat
 
 
 Cauliflower

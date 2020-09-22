@@ -11,20 +11,24 @@ for(let i=0; i<procedureCommDict.length; i++){
   procedureCommDictStr.push({procedurecommodity:procedureCommDict[i]})
 }
 
+//commoditycat
+let commoditycatDict = Object.values(dictionary.categories)
+commoditycatDict = [...new Set(commoditycatDict)]
 
+let commoditycatDictStr = []
+for(let i=0; i<commoditycatDict.length; i++){
+  commoditycatDictStr.push({procedurecommodity:commoditycatDict[i]})
+}
 
-
-
+//markets from url Dictionary
 const marketLabels = Object.values(markets.markets)
-
-
 marketStructure = []
 for (let i=0; i<marketLabels.length; i++){
   marketStructure.push({commoditymarket: marketLabels[i]})
 }
 
+//products from url dictionary
 const productLabels = Object.values(products.products)
-
 productStructure = []
 for (let i=0; i<productLabels.length; i++){
   productStructure.push({commodityproduct: productLabels[i]})
@@ -306,60 +310,8 @@ const catOrder = {
     },
   
     commoditycat: {
-      labels: [
-        "Animal Product",
-        "Animal Products",
-        "Beans",
-        "Cereals - Maize",
-        "Cereals - Other",
-        "Cereals - Rice",
-        "Dry Maize",
-        "Farm Input",
-        "Farm Inputs",
-        "Fruits",
-        "Fuel",
-        "Green Gram",
-        "Imported Rice",
-        "Maharagwe",
-        "Maize Flour",
-        "Matunda",
-        "Mixed Beans",
-        "Nafaka ",
-        "Nafaka Za Mahindi",
-        "Other",
-        "Peas",
-        "Roots & Tubers",
-        "Seeds & Nuts",
-        "Vegetable",
-        "Vegetables"
-      ],
-      structure: [
-        { commoditycat: "Animal Product" },
-        { commoditycat: "Animal Products" },
-        { commoditycat: "Beans" },
-        { commoditycat: "Cereals - Maize" },
-        { commoditycat: "Cereals - Other" },
-        { commoditycat: "Cereals - Rice" },
-        { commoditycat: "Dry Maize" },
-        { commoditycat: "Farm Input" },
-        { commoditycat: "Farm Inputs" },
-        { commoditycat: "Fruits" },
-        { commoditycat: "Fuel" },
-        { commoditycat: "Green Gram" },
-        { commoditycat: "Imported Rice" },
-        { commoditycat: "Maharagwe" },
-        { commoditycat: "Maize Flour" },
-        { commoditycat: "Matunda" },
-        { commoditycat: "Mixed Beans" },
-        { commoditycat: "Nafaka " },
-        { commoditycat: "Nafaka Za Mahindi" },
-        { commoditycat: "Other" },
-        { commoditycat: "Peas" },
-        { commoditycat: "Roots & Tubers" },
-        { commoditycat: "Seeds & Nuts" },
-        { commoditycat: "Vegetable" },
-        { commoditycat: "Vegetables" }
-      ]
+      labels:commoditycatDict,
+      structure:commoditycatDictStr
     },
   
     exchangedirection: {
