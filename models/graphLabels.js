@@ -1,15 +1,34 @@
 const markets = require('./marketNames')
 const products = require('./productNames')
+const dictionary = require('./dictionary')
 
+//procedureComm
+let procedureCommDict = Object.values(dictionary.procedureComm)
+procedureCommDict = [...new Set(procedureCommDict)]
+
+let procedureCommDictStr = []
+for(let i=0; i<procedureCommDict.length; i++){
+  procedureCommDictStr.push({procedurecommodity:procedureCommDict[i]})
+}
+
+//commoditycat
+let commoditycatDict = Object.values(dictionary.categories)
+commoditycatDict = [...new Set(commoditycatDict)]
+
+let commoditycatDictStr = []
+for(let i=0; i<commoditycatDict.length; i++){
+  commoditycatDictStr.push({procedurecommodity:commoditycatDict[i]})
+}
+
+//markets from url Dictionary
 const marketLabels = Object.values(markets.markets)
-
 marketStructure = []
 for (let i=0; i<marketLabels.length; i++){
   marketStructure.push({commoditymarket: marketLabels[i]})
 }
 
+//products from url dictionary
 const productLabels = Object.values(products.products)
-
 productStructure = []
 for (let i=0; i<productLabels.length; i++){
   productStructure.push({commodityproduct: productLabels[i]})
@@ -113,186 +132,8 @@ const catOrder = {
     },
     //   // TODO: add   a comma here ☝️ when you uncomment the code
     procedurecommodity: {
-      labels: [
-        "Arrow Roots (nduma)",
-        "Avocado",
-        "Avocados",
-        "Bananas",
-        "Bananas - Matoke",
-        "Bananas Cooking",
-        "Bananas Ripe",
-        "Beans",
-        "Brinjals/Eggplant",
-        "Bulls & Cows",
-        "Bulls/Cows",
-        "Cabbage",
-        "Capsicums/pepper",
-        "Carrots",
-        "Cashew Nuts",
-        "Cauliflower",
-        "Chicken (Broiler)",
-        "Chicken (Local)",
-        "Chickens (Local)",
-        "Chillies",
-        "Clothes  & Shoes (New)",
-        "Clothes (New)",
-        "Clothes (Used)",
-        "Clothes and Shoes (New)",
-        "Clothes and Shoes (Used)",
-        "Clothing and Shoes (Used)",
-        "Cosmetics",
-        "Cowpeas",
-        "Cucumber",
-        "Dolichos (Njahi)",
-        "Duck",
-        "Eggs",
-        "Flowers",
-        "Fresh Cassava",
-        "Fresh Nile Perch",
-        "Fresh peas",
-        "Geese",
-        "Goat",
-        "Goats",
-        "Greengrams",
-        "Groundnuts",
-        "Guavas",
-        "Guinea Fowl",
-        "Hides & Skins",
-        "Honey",
-        "Honey (Natural)",
-        "Irish Potatoes",
-        "Kales",
-        "Lemons",
-        "Lime",
-        "Maize",
-        "Maize Cereal",
-        "Maize Flour",
-        "Mangoes",
-        "Meat of bulls/cows/Goats/Sheep",
-        "Milk",
-        "Millet",
-        "Millet Flour",
-        "Mwezi Moja",
-        "New Clothes",
-        "New Clothing and Shoes",
-        "Nile Perch",
-        "Nile Perch Dried or Preserved ",
-        "Omena",
-        "Onions",
-        "Oranges",
-        "Passion fruits",
-        "Pawpaws (papaya)",
-        "Pineapples",
-        "Plastics",
-        "Rice - Husked",
-        "Rice - Processed",
-        "Sheep",
-        "Shoes (New)",
-        "Sorghum",
-        "Sorghum Cereal",
-        "Sorghum Flour",
-        "Sorghum Grains",
-        "Spinach",
-        "Sweet Potatoes",
-        "Tilapia",
-        "Tilapia Dried or Preserved",
-        "Tilapia Fresh",
-        "Timber",
-        "Tomatoes",
-        "Watermelon",
-        "Wheat Flour",
-        "Wheat Grain"
-      ],
-      structure: [
-        { procedurecommodity: "Arrow Roots (nduma)" },
-        { procedurecommodity: "Avocado" },
-        { procedurecommodity: "Avocados" },
-        { procedurecommodity: "Bananas" },
-        { procedurecommodity: "Bananas - Matoke" },
-        { procedurecommodity: "Bananas Cooking" },
-        { procedurecommodity: "Bananas Ripe" },
-        { procedurecommodity: "Beans" },
-        { procedurecommodity: "Brinjals/Eggplant" },
-        { procedurecommodity: "Bulls & Cows" },
-        { procedurecommodity: "Bulls/Cows" },
-        { procedurecommodity: "Cabbage" },
-        { procedurecommodity: "Capsicums/pepper" },
-        { procedurecommodity: "Carrots" },
-        { procedurecommodity: "Cashew Nuts" },
-        { procedurecommodity: "Cauliflower" },
-        { procedurecommodity: "Chicken (Broiler)" },
-        { procedurecommodity: "Chicken (Local)" },
-        { procedurecommodity: "Chickens (Local)" },
-        { procedurecommodity: "Chillies" },
-        { procedurecommodity: "Clothes  & Shoes (New)" },
-        { procedurecommodity: "Clothes (New)" },
-        { procedurecommodity: "Clothes (Used)" },
-        { procedurecommodity: "Clothes and Shoes (New)" },
-        { procedurecommodity: "Clothes and Shoes (Used)" },
-        { procedurecommodity: "Clothing and Shoes (Used)" },
-        { procedurecommodity: "Cosmetics" },
-        { procedurecommodity: "Cowpeas" },
-        { procedurecommodity: "Cucumber" },
-        { procedurecommodity: "Dolichos (Njahi)" },
-        { procedurecommodity: "Duck" },
-        { procedurecommodity: "Eggs" },
-        { procedurecommodity: "Flowers" },
-        { procedurecommodity: "Fresh Cassava" },
-        { procedurecommodity: "Fresh Nile Perch" },
-        { procedurecommodity: "Fresh peas" },
-        { procedurecommodity: "Geese" },
-        { procedurecommodity: "Goat" },
-        { procedurecommodity: "Goats" },
-        { procedurecommodity: "Greengrams" },
-        { procedurecommodity: "Groundnuts" },
-        { procedurecommodity: "Guavas" },
-        { procedurecommodity: "Guinea Fowl" },
-        { procedurecommodity: "Hides & Skins" },
-        { procedurecommodity: "Honey" },
-        { procedurecommodity: "Honey (Natural)" },
-        { procedurecommodity: "Irish Potatoes" },
-        { procedurecommodity: "Kales" },
-        { procedurecommodity: "Lemons" },
-        { procedurecommodity: "Lime" },
-        { procedurecommodity: "Maize" },
-        { procedurecommodity: "Maize Cereal" },
-        { procedurecommodity: "Maize Flour" },
-        { procedurecommodity: "Mangoes" },
-        { procedurecommodity: "Meat of bulls/cows/Goats/Sheep" },
-        { procedurecommodity: "Milk" },
-        { procedurecommodity: "Millet" },
-        { procedurecommodity: "Millet Flour" },
-        { procedurecommodity: "Mwezi Moja" },
-        { procedurecommodity: "New Clothes" },
-        { procedurecommodity: "New Clothing and Shoes" },
-        { procedurecommodity: "Nile Perch" },
-        { procedurecommodity: "Nile Perch Dried or Preserved " },
-        { procedurecommodity: "Omena" },
-        { procedurecommodity: "Onions" },
-        { procedurecommodity: "Oranges" },
-        { procedurecommodity: "Passion fruits" },
-        { procedurecommodity: "Pawpaws (papaya)" },
-        { procedurecommodity: "Pineapples" },
-        { procedurecommodity: "Plastics" },
-        { procedurecommodity: "Rice - Husked" },
-        { procedurecommodity: "Rice - Processed" },
-        { procedurecommodity: "Sheep" },
-        { procedurecommodity: "Shoes (New)" },
-        { procedurecommodity: "Sorghum" },
-        { procedurecommodity: "Sorghum Cereal" },
-        { procedurecommodity: "Sorghum Flour" },
-        { procedurecommodity: "Sorghum Grains" },
-        { procedurecommodity: "Spinach" },
-        { procedurecommodity: "Sweet Potatoes" },
-        { procedurecommodity: "Tilapia" },
-        { procedurecommodity: "Tilapia Dried or Preserved" },
-        { procedurecommodity: "Tilapia Fresh" },
-        { procedurecommodity: "Timber" },
-        { procedurecommodity: "Tomatoes" },
-        { procedurecommodity: "Watermelon" },
-        { procedurecommodity: "Wheat Flour" },
-        { procedurecommodity: "Wheat Grain" }
-      ]
+      labels: procedureCommDict,
+      structure: procedureCommDictStr
     },
     procedurecommoditycat: {
       labels: [
@@ -429,8 +270,7 @@ const catOrder = {
         { procedureorigin: "EAC" },
         { procedureorigin: "KEN" },
         { procedureorigin: "Outside EAC" },
-        { procedureorigin: "OutsideEAC" },
-        { procedureorigin: "TZA->KEN" }
+        { procedureorigin: "OutsideEAC" }
       ]
     },
     commoditycountry: {
@@ -470,60 +310,8 @@ const catOrder = {
     },
   
     commoditycat: {
-      labels: [
-        "Animal Product",
-        "Animal Products",
-        "Beans",
-        "Cereals - Maize",
-        "Cereals - Other",
-        "Cereals - Rice",
-        "Dry Maize",
-        "Farm Input",
-        "Farm Inputs",
-        "Fruits",
-        "Fuel",
-        "Green Gram",
-        "Imported Rice",
-        "Maharagwe",
-        "Maize Flour",
-        "Matunda",
-        "Mixed Beans",
-        "Nafaka ",
-        "Nafaka Za Mahindi",
-        "Other",
-        "Peas",
-        "Roots & Tubers",
-        "Seeds & Nuts",
-        "Vegetable",
-        "Vegetables"
-      ],
-      structure: [
-        { commoditycat: "Animal Product" },
-        { commoditycat: "Animal Products" },
-        { commoditycat: "Beans" },
-        { commoditycat: "Cereals - Maize" },
-        { commoditycat: "Cereals - Other" },
-        { commoditycat: "Cereals - Rice" },
-        { commoditycat: "Dry Maize" },
-        { commoditycat: "Farm Input" },
-        { commoditycat: "Farm Inputs" },
-        { commoditycat: "Fruits" },
-        { commoditycat: "Fuel" },
-        { commoditycat: "Green Gram" },
-        { commoditycat: "Imported Rice" },
-        { commoditycat: "Maharagwe" },
-        { commoditycat: "Maize Flour" },
-        { commoditycat: "Matunda" },
-        { commoditycat: "Mixed Beans" },
-        { commoditycat: "Nafaka " },
-        { commoditycat: "Nafaka Za Mahindi" },
-        { commoditycat: "Other" },
-        { commoditycat: "Peas" },
-        { commoditycat: "Roots & Tubers" },
-        { commoditycat: "Seeds & Nuts" },
-        { commoditycat: "Vegetable" },
-        { commoditycat: "Vegetables" }
-      ]
+      labels:commoditycatDict,
+      structure:commoditycatDictStr
     },
   
     exchangedirection: {
@@ -589,5 +377,5 @@ const catOrder = {
       return catOrder
   }
   
-  module.exports = {all};
+  module.exports = {all, catOrder};
   
