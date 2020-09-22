@@ -42,7 +42,8 @@ module.exports = function dictionaryParcer(data) {
         }
       } // removes the arrow from proceduredest and exchange direction
 
-      if (entry[0] === "commoditymarket") {
+      if (entry[0] === "commoditymarket" && typeof entry[1] === "string") {
+        entry[1] = toCaps(entry[1])
         if (markets[entry[1]]) {
           obj[entry[0]] = markets[entry[1]];
         } else {
@@ -50,18 +51,36 @@ module.exports = function dictionaryParcer(data) {
         }
       } // normalizes the market entries against the dictionary
 
-      if (typeof entry[1] === "string" && entry[0] === "commoditycat") {
-        //console.log(categories)
-        Object.entries(categories).forEach(category => {
-          if (obj[entry[0]] === category[0]) {
-            obj[entry[0]] = category[1];
-          }
-        });
-      } //normilizes commoditycategories against the dictionary
-      
-      if (entry[0] === "procedurecommodity"  && catOrder.procedurecommodity.labels.includes(entry[1])) {
-            obj[entry[0]] = commodity[1];
-          }
+      // translates from dictionary.js categories
+      if (entry[0] === "commoditycat" && typeof entry[1] === "string"){
+        // if entry[1] is a key in the dictionary
+        // make sure in caps
+        entry[1] = toCaps(entry[1])
+        if (Object.keys(categories).includes(entry[1])){
+          //translate
+          entry[1] = categories[entry[1]]
+          entry[0] = entry[1]
+        } else {
+          // if not in keys, set it to undefined
+          entry[0] = undefined
+        }
+      } 
+
+
+       // translates from dictionary.js procedureComm
+       if (entry[0] === "procedurecommodity" && typeof entry[1] === "string"){
+        // if entry[1] is a key in the dictionary
+        // make sure in caps
+        entry[1] = toCaps(entry[1])
+        if (Object.keys(procedureComm).includes(entry[1])){
+          //translate
+          entry[1] = procedureComm[entry[1]]
+          entry[0] = entry[1]
+        } else {
+          // if not in keys, set it to undefined
+          entry[0] = undefined
+        }
+      } 
 
       if (typeof entry[1] === "string" && entry[0] === "commodityproduct") {
         const productArray = [];

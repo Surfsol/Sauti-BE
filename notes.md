@@ -51,11 +51,13 @@ differences
 
 From dictionary
 Finished:
-"commodityproduct"
-"commoditymarket"
-"procedurerequireddocument"
-"procedurerelevantagency"
-commoditycat
+procedureComm - graphLabels and dictionaryParser.js
+"commodityproduct"  - graphLabels and dictionaryParser.js
+"commoditymarket"  - graphLabels and dictionaryParser.js
+"procedurerequireddocument" - filter on dictParser
+"procedurerelevantagency" - filter on dictParser
+commoditycat - graphLabels and dictionaryParser.js
+
 
 
 Cauliflower
