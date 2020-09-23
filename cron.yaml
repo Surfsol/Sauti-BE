@@ -1,21 +1,21 @@
-version: 1
+# version: 1
 
-cron:
-  - name: 'tradersUsers'
-    url: "node ./models/tradersDataParser.js"
-    # schedule minute hour, day of month, month, day of week
-    # 0 minute, 23 hour, everyday
-    schedule: "0 23 * * *"
-  - name: 'sessionsData'
-    url: "node ./models/sessionsDataParser.js"
-    schedule: "0 23 * * *"
-  - name: 'payment'
-    url: 'node ./models/paypalCancellation.js'
-    schedule: "0 23 * * *"
-  - name: 'Market dictionary'
-    url: 'node ./models/MarketsFetch.js'
-    schedule: "0 12 * * *"
-  - name: 'Product dictionary'
-    url: 'node ./models/ProductsFetch.js'
-    schedule: "0 23 * * *"
+# cron:
+#   - name: 'tradersUsers'
+#     url: "node ./models/tradersDataParser.js"
+#     # schedule minute hour, day of month, month, day of week
+#     # 0 minute, 23 hour, everyday
+#     schedule: "0 23 * * *"
+#   - name: 'sessionsData'
+#     url: "node ./models/sessionsDataParser.js"
+#     schedule: "0 23 * * *"
+#   - name: 'payment'
+#     url: 'node ./models/paypalCancellation.js'
+#     schedule: "0 23 * * *"
+#   - name: 'Market dictionary'
+#     url: 'node ./models/MarketsFetch.js'
+#     schedule: "0 12 * * *"
+#   - name: 'Product dictionary'
+#     url: 'node ./models/ProductsFetch.js'
+#     schedule: "0 23 * * *"
     
