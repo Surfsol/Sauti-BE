@@ -2,11 +2,11 @@ const cron = require('node-cron')
 let shell = require('shelljs')
 
 
-cron.schedule('* 4 * * * *', async function(){
-    console.log('scheduler tradersData running')
-    shell.exec("node ./models/tradersDataParser.js").code
+// cron.schedule('* 4 * * * *', async function(){
+//     console.log('scheduler tradersData running')
+//     shell.exec("node ./models/tradersDataParser.js").code
  
-})
+// })
 
 // cron.schedule('4 * * * * *', function(){
 //     console.log('scheduler sessions running')
