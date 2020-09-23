@@ -1,8 +1,7 @@
 const { categories, procedureComm } = require("./dictionary.js");
 const { markets } = require("./marketNames");
 const { products } = require("./productNames");
-const {catOrder} = require('./graphLabels.js')
-
+const { catOrder } = require("./graphLabels.js");
 
 // ==== SEE BOTTOM OF FILE BEFORE RUNNING ====
 // To run the file during testing, run: node ./models/sessionsDataParser.js
@@ -14,7 +13,6 @@ module.exports = function dictionaryParcer(data) {
   translatedData = [];
 
   data.forEach(obj => {
-   
     Object.entries(obj).forEach(entry => {
       if (
         typeof entry[1] === "string" &&
@@ -43,7 +41,7 @@ module.exports = function dictionaryParcer(data) {
       } // removes the arrow from proceduredest and exchange direction
 
       if (entry[0] === "commoditymarket" && typeof entry[1] === "string") {
-        entry[1] = toCaps(entry[1])
+        entry[1] = toCaps(entry[1]);
         if (markets[entry[1]]) {
           obj[entry[0]] = markets[entry[1]];
         } else {
@@ -52,35 +50,34 @@ module.exports = function dictionaryParcer(data) {
       } // normalizes the market entries against the dictionary
 
       // translates from dictionary.js categories
-      if (entry[0] === "commoditycat" && typeof entry[1] === "string"){
+      if (entry[0] === "commoditycat" && typeof entry[1] === "string") {
         // if entry[1] is a key in the dictionary
         // make sure in caps
-        entry[1] = toCaps(entry[1])
-        if (Object.keys(categories).includes(entry[1])){
+        entry[1] = toCaps(entry[1]);
+        if (Object.keys(categories).includes(entry[1])) {
           //translate
-          entry[1] = categories[entry[1]]
-          entry[0] = entry[1]
+          entry[1] = categories[entry[1]];
+          entry[0] = entry[1];
         } else {
           // if not in keys, set it to undefined
-          entry[0] = undefined
+          entry[0] = undefined;
         }
-      } 
+      }
 
-
-       // translates from dictionary.js procedureComm
-       if (entry[0] === "procedurecommodity" && typeof entry[1] === "string"){
+      // translates from dictionary.js procedureComm
+      if (entry[0] === "procedurecommodity" && typeof entry[1] === "string") {
         // if entry[1] is a key in the dictionary
         // make sure in caps
-        entry[1] = toCaps(entry[1])
-        if (Object.keys(procedureComm).includes(entry[1])){
+        entry[1] = toCaps(entry[1]);
+        if (Object.keys(procedureComm).includes(entry[1])) {
           //translate
-          entry[1] = procedureComm[entry[1]]
-          entry[0] = entry[1]
+          entry[1] = procedureComm[entry[1]];
+          entry[0] = entry[1];
         } else {
           // if not in keys, set it to undefined
-          entry[0] = undefined
+          entry[0] = undefined;
         }
-      } 
+      }
 
       if (typeof entry[1] === "string" && entry[0] === "commodityproduct") {
         const productArray = [];
@@ -110,12 +107,34 @@ module.exports = function dictionaryParcer(data) {
         entry[1].length > 3 &&
         !entry[1].includes("->")
       ) {
+        //console.log(obj);
         obj.proceduredest = undefined;
       } //checks if the entry type in proceeduredest is valid
+
+      if (entry[0] === "procedurecommoditycat" && entry[1] !== undefined) {
+        if (!catOrder.procedurecommoditycat.labels.includes(entry[1])) {
+          obj.procedurecommoditycat = undefined;
+        }
+      }
+      if (entry[0] === "procedureorigin" && entry[1] !== undefined) {
+        if (!catOrder.procedureorigin.labels.includes(entry[1])) {
+          obj.procedureorigin = undefined;
+        }
+      }
+      if (entry[0] === "commoditycountry" && entry[1] !== undefined) {
+        if (!catOrder.commoditycountry.labels.includes(entry[1])) {
+          obj.commoditycountry = undefined;
+        }
+      }
+
+      if (entry[0] === "exchangedirection" && entry[1] !== undefined) {
+        if (!catOrder.exchangedirection.labels.includes(entry[1])) {
+          obj.exchangedirection = undefined;
+        }
+      }
     });
     translatedData.push(obj);
   });
-  //   console.log("final", translatedData);
   return translatedData;
 };
 

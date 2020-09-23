@@ -57,7 +57,10 @@ procedureComm - graphLabels and dictionaryParser.js
 "procedurerequireddocument" - filter on dictParser
 "procedurerelevantagency" - filter on dictParser
 commoditycat - graphLabels and dictionaryParser.js
+exchangedirection
+commoditycountry
 
+FILTERED WITH GRAPHLABELS:
+procedurecommoditycat
+procedureorigin
 
-
-Cauliflower
