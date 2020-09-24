@@ -34,11 +34,11 @@ module.exports = function dictionaryParcer(data) {
       }
       // will run translations and corections for products against the dictionary
 
-      if (typeof entry[1] === "string" && entry[0] === "proceduredest") {
-        if (entry[1].includes("->")) {
-          obj[entry[0]] = destFormat(entry[1]);
-        }
-      } // removes the arrow from proceduredest and exchange direction
+      // if (typeof entry[1] === "string" && entry[0] === "proceduredest") {
+      //   if (entry[1].includes("->")) {
+      //     obj[entry[0]] = destFormat(entry[1]);
+      //   }
+      // } // removes the arrow from proceduredest and exchange direction
 
       if (entry[0] === "commoditymarket" && typeof entry[1] === "string") {
         entry[1] = toCaps(entry[1]);
@@ -101,15 +101,12 @@ module.exports = function dictionaryParcer(data) {
         }
       } //removes categories that are not present in the dictionaryParser
 
-      if (
-        typeof entry[1] === "string" &&
-        entry[0] === "proceduredest" &&
-        entry[1].length > 3 &&
-        !entry[1].includes("->")
-      ) {
-        //console.log(obj);
-        obj.proceduredest = undefined;
-      } //checks if the entry type in proceeduredest is valid
+      //checks if the entry type in proceeduredest is valid
+      if (entry[0] === "proceduredest" && entry[1] !== undefined) {
+        if (!catOrder.proceduredest.labels.includes(entry[1])) {
+          obj.proceduredest = undefined;
+        }
+      }
 
       if (entry[0] === "procedurecommoditycat" && entry[1] !== undefined) {
         if (!catOrder.procedurecommoditycat.labels.includes(entry[1])) {
@@ -156,13 +153,13 @@ function toCaps(str) {
   return splitStr.join(" ");
 }
 
-function destFormat(str) {
-  const arrow = new RegExp("->");
-  if (arrow.test(str)) {
-    str = str.split("->")[1];
-    return str;
-  }
-} //removes the arrows
+// function destFormat(str) {
+//   const arrow = new RegExp("->");
+//   if (arrow.test(str)) {
+//     str = str.split("->")[1];
+//     return str;
+//   }
+// } //removes the arrows
 
 //You can uncomment and use this mock object for testing.
 // const mockObject = [
