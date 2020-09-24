@@ -172,27 +172,15 @@ const catOrder = {
   
     proceduredest: {
       labels: [
-        "KEN",
         "KEN->TZA",
         "KEN->UGA",
-        "Kenya->Tanzania",
-        "Kenya->Uganda",
-        "Maize",
-        "OutsideEAC",
         "TZA->KEN",
-        "UGA",
         "UGA->KEN"
       ],
       structure: [
-        { proceduredest: "KEN" },
         { proceduredest: "KEN->TZA" },
         { proceduredest: "KEN->UGA" },
-        { proceduredest: "Kenya->Tanzania" },
-        { proceduredest: "Kenya->Uganda" },
-        { proceduredest: "Maize" },
-        { proceduredest: "OutsideEAC" },
         { proceduredest: "TZA->KEN" },
-        { proceduredest: "UGA" },
         { proceduredest: "UGA->KEN" }
       ]
     },
@@ -318,7 +306,12 @@ const catOrder = {
       labels: [
         "BIF->RWF",
         "CDF->RWF",
+        "ETB->KES",
+        "ETB->SOS",
+        "ETB->USD",
+        "KES->ETB",
         "KES->RWF",
+        "KES->SOS",
         "KES->TZS",
         "KES->UGX",
         "KES->USD",
@@ -328,7 +321,9 @@ const catOrder = {
         "RWF->TZS",
         "RWF->UGX",
         "RWF->USD",
-        "TSH->KES",
+        "SOS->ETB",
+        "SOS->KES",
+        "SOS->USD",
         "TZS->KES",
         "TZS->RWF",
         "TZS->UGX",
@@ -337,16 +332,26 @@ const catOrder = {
         "UGX->RWF",
         "UGX->TZS",
         "UGX->USD",
+        "USD->ETB",
         "USD->KES",
         "USD->RWF",
+        "USD->SOS",
         "USD->TZS",
         "USD->UGX"
       ],
   
       structure: [
+
+
+
         { exchangedirection: "BIF->RWF" },
         { exchangedirection: "CDF->RWF" },
+        { exchangedirection: "ETB->KES" },
+        { exchangedirection: "ETB->SOS" },
+        { exchangedirection: "ETB->USD" },
+        { exchangedirection: "KES->ETB" },
         { exchangedirection: "KES->RWF" },
+        { exchangedirection: "KES->SOS" },
         { exchangedirection: "KES->TZS" },
         { exchangedirection: "KES->UGX" },
         { exchangedirection: "KES->USD" },
@@ -356,7 +361,9 @@ const catOrder = {
         { exchangedirection: "RWF->TZS" },
         { exchangedirection: "RWF->UGX" },
         { exchangedirection: "RWF->USD" },
-        { exchangedirection: "TSH->KES" },
+        { exchangedirection: "SOS->ETB" },
+        { exchangedirection: "SOS->KES" },
+        { exchangedirection: "SOS->USD" },
         { exchangedirection: "TZS->KES" },
         { exchangedirection: "TZS->RWF" },
         { exchangedirection: "TZS->UGX" },
@@ -365,8 +372,10 @@ const catOrder = {
         { exchangedirection: "UGX->RWF" },
         { exchangedirection: "UGX->TZS" },
         { exchangedirection: "UGX->USD" },
+        { exchangedirection: "USD->ETB" },
         { exchangedirection: "USD->KES" },
         { exchangedirection: "USD->RWF" },
+        { exchangedirection: "USD->SOS" },
         { exchangedirection: "USD->TZS" },
         { exchangedirection: "USD->UGX" }
       ]
