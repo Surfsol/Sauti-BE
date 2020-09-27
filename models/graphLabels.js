@@ -253,7 +253,7 @@ const catOrder = {
       ]
     },
     procedureorigin: {
-      labels: ["EAC", "KEN", "Outside EAC", "OutsideEAC", "TZA->KEN"],
+      labels: ["EAC", "KEN", "Outside EAC", "OutsideEAC"],
       structure: [
         { procedureorigin: "EAC" },
         { procedureorigin: "KEN" },
