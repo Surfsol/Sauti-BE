@@ -20,13 +20,13 @@ const sendResetPasswordEmail = (user, code, url) => {
 };
 
 const contactEmail = input => {
-  console.log('in contactEmail')
   const output = `
           <p>You have a new contact request</p>
           <h3>Contact Details</h3>
           <ul>  
             <li>Name: ${input.name}</li>
             <li>Email: ${input.email}</li>
+            <li>Nature of Inquiry: ${input.nature}</li>
           </ul>
           <h3>Message</h3>
           <p>${input.message}</p>
