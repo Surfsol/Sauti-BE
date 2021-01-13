@@ -11,6 +11,10 @@ To get the server running locally:
 - **npm run server** to start the local server.
 - **update .env** store SQL server connection info there.
 
+### Run traders and sessions updates
+node ./models/sessionsDataParser.js
+node ./models/tradersDataParser.js
+
 ### Backend framework
 
 We built our backend, using Node, Express, GraphQL, and Knex to work with a MySQL database.
