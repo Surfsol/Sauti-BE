@@ -5,7 +5,6 @@ const dictionary = require('./dictionary')
 //procedureComm
 let procedureCommDict = Object.values(dictionary.procedureComm)
 procedureCommDict = [...new Set(procedureCommDict)]
-
 let procedureCommDictStr = []
 for(let i=0; i<procedureCommDict.length; i++){
   procedureCommDictStr.push({procedurecommodity:procedureCommDict[i]})
@@ -14,21 +13,23 @@ for(let i=0; i<procedureCommDict.length; i++){
 //commoditycat
 let commoditycatDict = Object.values(dictionary.categories)
 commoditycatDict = [...new Set(commoditycatDict)]
-
+commoditycatDict.sort()
 let commoditycatDictStr = []
 for(let i=0; i<commoditycatDict.length; i++){
   commoditycatDictStr.push({procedurecommodity:commoditycatDict[i]})
 }
 
-//markets from url Dictionary
-const marketLabels = Object.values(markets.markets)
+let marketLabels = Object.values(markets.markets)
+marketLabels = [...new Set(marketLabels)]
 marketStructure = []
 for (let i=0; i<marketLabels.length; i++){
   marketStructure.push({commoditymarket: marketLabels[i]})
 }
 
 //products from url dictionary
-const productLabels = Object.values(products.products)
+let productLabels = Object.values(products.products)
+productLabels = [...new Set(productLabels)]
+productLabels.sort()
 productStructure = []
 for (let i=0; i<productLabels.length; i++){
   productStructure.push({commodityproduct: productLabels[i]})
