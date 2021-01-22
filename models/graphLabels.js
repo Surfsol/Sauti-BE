@@ -13,6 +13,7 @@ for(let i=0; i<procedureCommDict.length; i++){
 //commoditycat
 let commoditycatDict = Object.values(dictionary.categories)
 commoditycatDict = [...new Set(commoditycatDict)]
+commoditycatDict.sort()
 let commoditycatDictStr = []
 for(let i=0; i<commoditycatDict.length; i++){
   commoditycatDictStr.push({procedurecommodity:commoditycatDict[i]})
@@ -28,6 +29,7 @@ for (let i=0; i<marketLabels.length; i++){
 //products from url dictionary
 let productLabels = Object.values(products.products)
 productLabels = [...new Set(productLabels)]
+productLabels.sort()
 productStructure = []
 for (let i=0; i<productLabels.length; i++){
   productStructure.push({commodityproduct: productLabels[i]})
