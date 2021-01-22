@@ -65,6 +65,7 @@ const typeDefs = gql`
   type NodeEmail {
     name: String
     email: String
+    nature: String
     message: String
   }
 
@@ -107,6 +108,7 @@ const typeDefs = gql`
   input emailContactInput {
     name: String
     email: String
+    nature: String
     message: String
   }
 
