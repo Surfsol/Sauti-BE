@@ -61,24 +61,35 @@ module.exports = {
   Mutation: {
     async register(_, { input }, ctx) {
       console.log("input", input);
-      const users = await ctx.Users.findAll();
-      const emailTaken = users.some(user => user.email === input.email);
+      const found = await ctx.Users.findByEmail(input.email)
+      console.log('found', found, found.verified_email)
+      let emailTaken = false
+      if (found.verified_email === 1){
+        return { email: "Sorry, this email has already been taken." };
+      } else if(found.verified_email === 0){
+        return {email: `${found.verified_email} is already in use. Either respond to the verification email or reset your password.`}
+      }
+      // now see if already verified 
+      // const users = await ctx.Users.findAll();
+      // const emailTaken = users.some(user => user.email === input.email);
       if (emailTaken) {
         // This should return an email with the following message. All other requested fields are returned as null
-        return { email: "Sorry, this email has already been taken." };
+        
       } else {
         const hashedPassword = bcrypt.hashSync(input.password, 8);
+        const generateNumber = Math.floor(Math.random() * 90000) + 10000;
         const [newlyCreatedUser] = await ctx.Users.create({
           ...input,
-          password: hashedPassword
+          password: hashedPassword,
+          verification_code: generateNumber,
         });
-        const token = generateToken(newlyCreatedUser);
+        //const token = generateToken(newlyCreatedUser);
         // leave out the stored password when returning the user object.
-        const {
-          password,
-          ...newlyCreatedUserWithoutPassword
-        } = newlyCreatedUser;
-        return { ...newlyCreatedUserWithoutPassword, token };
+        // const {
+        //   password,
+        //   ...newlyCreatedUserWithoutPassword
+        // } = newlyCreatedUser;
+        return ;
       }
     },
     async login(_, { input }, ctx) {
@@ -266,7 +277,7 @@ module.exports = {
       if (theUser) {
         // if user exists
         // this generates 5 random numbers
-        let generateNumber = Math.floor(Math.random() * 90000) + 10000;
+        const generateNumber = Math.floor(Math.random() * 90000) + 10000;
         // saving verification code to DB
         theUser.verification_code = generateNumber;
         // saving reset token to DB
