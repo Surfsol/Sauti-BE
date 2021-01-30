@@ -55,10 +55,8 @@ const contactEmail = input => {
     if (err) {
       return "Error occured." + err.message;
     }
-
     console.log("Message sent: %s", info.messageId);
     console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-
     return "message sent";
   });
 };
