@@ -258,21 +258,17 @@ module.exports = {
   },
   ResetPasswordOrError: {
     async __resolveType(user, ctx) {
-      const theUser = await ctx.Users.findByEmail(user.email);
-      const { id } = theUser;
+      const userObj = await ctx.Users.findByEmail(user.email);
+      const { id, email } = userObj;
+      let userUpdate = {id:id, email:email}
       // generating token that expires in 1 hour for the password URL + the token needs to have current user email on it
       const resetTokenGeneration = generateResetToken(theUser);
       const url = `https://www.databank.sautiafrica.org/password-verification/?resetToken=${resetTokenGeneration}`;
       if (theUser) {
-        // if user exists
-        // this generates 5 random numbers
         let generateNumber = Math.floor(Math.random() * 90000) + 10000;
-        // saving verification code to DB
-        theUser.verification_code = generateNumber;
-        // saving reset token to DB
-        theUser.resetToken = resetTokenGeneration;
-        ctx.Users.updateById(id, theUser);
-        await sendResetPasswordEmail(theUser, generateNumber, url);
+        userUpdate.verification_code = generateNumber;
+        await ctx.Users.updateById(id, userUpdate);
+        await sendResetPasswordEmail(userUpdate, generateNumber, url);
         return "DatabankUser";
       } else {
         let error = user;
