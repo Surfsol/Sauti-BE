@@ -174,6 +174,7 @@ module.exports = {
     async __resolveType(user, ctx, info) {
       if (user.password) {
         user.password = bcrypt.hashSync(user.password, 8);
+        user.verification_code = null
       }
       const updated = await ctx.Users.updateById(user.id, user);
       if (updated) {
