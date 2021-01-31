@@ -4,8 +4,12 @@ const { JWT_SECRET: secret } = require("../config/secrets");
 const { JWT_SECRET_RESET: reset_secret } = require("../config/secrets");
 const axios = require("axios");
 const qs = require("qs");
-const { sendResetPasswordEmail, contactEmail } = require("../services/EmailService");
-
+const {
+  sendResetPasswordEmail,
+  contactEmail,
+  sendVerifyAccount,
+  sendSuccess,
+} = require("../services/EmailService");
 
 module.exports = {
   Query: {
@@ -54,43 +58,29 @@ module.exports = {
     databankUser(_, args, ctx) {
       return ctx.Users.findOne({ email: args.input.email });
     },
-    getGraphLabels(_, args, ctx){
-      return ctx.CatLabels.all()
+    getGraphLabels(_, args, ctx) {
+      return ctx.CatLabels.all();
     }
   },
   Mutation: {
     async register(_, { input }, ctx) {
-      console.log("input", input);
-      const found = await ctx.Users.findByEmail(input.email)
-      console.log('found', found, found.verified_email)
-      let emailTaken = false
-      if (found.verified_email === 1){
-        return { email: "Sorry, this email has already been taken." };
-      } else if(found.verified_email === 0){
-        return {email: `${found.verified_email} is already in use. Either respond to the verification email or reset your password.`}
-      }
-      // now see if already verified 
-      // const users = await ctx.Users.findAll();
-      // const emailTaken = users.some(user => user.email === input.email);
-      if (emailTaken) {
-        // This should return an email with the following message. All other requested fields are returned as null
-        
-      } else {
-        const hashedPassword = bcrypt.hashSync(input.password, 8);
-        const generateNumber = Math.floor(Math.random() * 90000) + 10000;
-        const [newlyCreatedUser] = await ctx.Users.create({
-          ...input,
-          password: hashedPassword,
-          verification_code: generateNumber,
-        });
-        //const token = generateToken(newlyCreatedUser);
-        // leave out the stored password when returning the user object.
-        // const {
-        //   password,
-        //   ...newlyCreatedUserWithoutPassword
-        // } = newlyCreatedUser;
-        return ;
-      }
+      let found = undefined;
+      try {
+        found = await ctx.Users.findByEmail(input.email);
+        if (found) {
+          return found
+        } else {
+          const hashedPassword = bcrypt.hashSync(input.password, 8);
+          const [newlyCreatedUser] = await ctx.Users.create({
+            ...input,
+            password: hashedPassword,
+          });
+          const token = generateResetToken(newlyCreatedUser);
+          const url = `https://www.databank.sautiafrica.org/email-verification/?resetToken=${token}`;
+          await sendVerifyAccount(input, url);
+          return newlyCreatedUser;
+        }
+      } catch (err) {return err}
     },
     async login(_, { input }, ctx) {
       let user = input;
@@ -111,7 +101,10 @@ module.exports = {
       // The first arg to EditedUserOrError becomes the returned input value
       return input;
     },
-
+    validateEmail(_, { input }, ctx) {
+      // The first arg to EmailValidate becomes the returned input value
+      return input;
+    },
     deleteUser(_, { input }) {
       // The first arg to DeletedUserOrError becomes the returned input value
       return input;
@@ -127,8 +120,8 @@ module.exports = {
       return input;
     },
     async emailByContact(_, { input }, ctx) {
-      return contactEmail(input)
-      }
+      return contactEmail(input);
+    }
   },
   UpdateUserToExpired: {
     async __resolveType(user, ctx) {
@@ -186,11 +179,26 @@ module.exports = {
       if (user.password) {
         user.password = bcrypt.hashSync(user.password, 8);
       }
+      user.verified_email = 1;
       const updated = await ctx.Users.updateById(user.id, user);
       if (updated) {
         return "DatabankUser";
       } else {
         let error = user;
+        error.message = `There was an issue updating the user with id ${user.id}`;
+        return "Error";
+      }
+    }
+  },
+  EmailValidate : {
+    async __resolveType(user, ctx) {
+      user.verified_email = 1;
+      const updated = await ctx.Users.updateById(user.id, user);
+      await sendSuccess(user, 'verify')
+      if (updated) {
+        return "DatabankUser";
+      } else {
+        let error ;
         error.message = `There was an issue updating the user with id ${user.id}`;
         return "Error";
       }
@@ -333,11 +341,9 @@ function validPassword(user, ctx) {
           : false;
       })
       .catch(error => {
-        console.error("Invalid email: ", error);
         return false;
       });
   } else {
-    console.error("You did not specify an email and/or password.");
     return false;
   }
 }
