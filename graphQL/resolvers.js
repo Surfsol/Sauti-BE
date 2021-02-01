@@ -8,7 +8,7 @@ const {
   sendResetPasswordEmail,
   contactEmail,
   sendVerifyAccount,
-  sendSuccess,
+  sendSuccess
 } = require("../services/EmailService");
 
 module.exports = {
@@ -68,19 +68,21 @@ module.exports = {
       try {
         found = await ctx.Users.findByEmail(input.email);
         if (found) {
-          return found
+          return found;
         } else {
           const hashedPassword = bcrypt.hashSync(input.password, 8);
           const [newlyCreatedUser] = await ctx.Users.create({
             ...input,
-            password: hashedPassword,
+            password: hashedPassword
           });
           const token = generateResetToken(newlyCreatedUser);
           const url = `https://www.databank.sautiafrica.org/email-verification/?resetToken=${token}`;
           await sendVerifyAccount(input, url);
           return newlyCreatedUser;
         }
-      } catch (err) {return err}
+      } catch (err) {
+        return err;
+      }
     },
     async login(_, { input }, ctx) {
       let user = input;
@@ -190,15 +192,30 @@ module.exports = {
       }
     }
   },
-  EmailValidate : {
+  EmailValidate: {
     async __resolveType(user, ctx) {
       user.verified_email = 1;
       const updated = await ctx.Users.updateById(user.id, user);
-      await sendSuccess(user, 'verify')
+      await sendSuccess(user, "verify");
       if (updated) {
         return "DatabankUser";
       } else {
-        let error ;
+        let error;
+        error.message = `There was an issue updating the user with id ${user.id}`;
+        return "Error";
+      }
+    }
+  },
+  PasswordReset: {
+    async __resolveType(user, ctx) {
+      user.password = bcrypt.hashSync(user.password, 8);
+      user.verified_email = 1;
+      const updated = await ctx.Users.updateById(user.id, user);
+      await sendSuccess(user, "password");
+      if (updated) {
+        return "DatabankUser";
+      } else {
+        let error;
         error.message = `There was an issue updating the user with id ${user.id}`;
         return "Error";
       }

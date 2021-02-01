@@ -102,6 +102,7 @@ const typeDefs = gql`
   union AddPaypalPlanOrError = DatabankUser | Error
   union ResetPasswordOrError = DatabankUser | Error
   union EmailValidate = DatabankUser | Error
+  union PasswordReset = DatabankUser | Error
 
   input emailContactInput {
     name: String
@@ -218,6 +219,7 @@ const typeDefs = gql`
     login(input: newLoginInput!): DatabankUser!
     editUser(input: newEditUserInput!): EditedUserOrError!
     validateEmail(input: newEditUserInput!): EmailValidate!
+    resetPassword(input: newEditUserInput!): PasswordReset!
     deleteUser(input: newDeleteUserInput!): DeletedUserOrError!
     updateUserToExpired(
       input: newUpdateUserToExpiredInput!
