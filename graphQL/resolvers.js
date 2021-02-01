@@ -68,7 +68,7 @@ module.exports = {
       try {
         found = await ctx.Users.findByEmail(input.email);
         if (found) {
-          return found;
+          return { email: "Sorry, this email has already been taken." };
         } else {
           const hashedPassword = bcrypt.hashSync(input.password, 8);
           const [newlyCreatedUser] = await ctx.Users.create({
@@ -215,6 +215,7 @@ module.exports = {
     async __resolveType(user, ctx) {
       user.password = bcrypt.hashSync(user.password, 8);
       user.verified_email = 1;
+      user.verification_code = null;
       const updated = await ctx.Users.updateById(user.id, user);
       await sendSuccess(user, "password");
       if (updated) {
