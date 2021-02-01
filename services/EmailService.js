@@ -10,13 +10,19 @@ let transporter = nodemailer.createTransport({
 });
 
 const sendResetPasswordEmail = (user, code, url) => {
-  transporter.sendMail({
-    from: "Databank Sauti Africa <tradeinsights.sautiafrica@gmail.com>",
-    to: `${user.email}`,
-    subject: "Code Verification - NO REPLY",
-    text: "For clients with plaintext support only",
-    html: `<p>Hello ${user.email}, <br /> Your verifcation code to reset your password is <b>${code}</b>. <br /> Please visit <a href="${url}">Password Reset Verification Link</a> to reset your password.  </p>`
-  });
+  transporter.sendMail(
+    {
+      from: "Databank Sauti Africa <tradeinsights.sautiafrica@gmail.com>",
+      to: `${user.email}`,
+      subject: "Code Verification - NO REPLY",
+      text: "For clients with plaintext support only",
+      html: `<p>Hello ${user.email}, <br /> Your verifcation code to reset your password is <b>${code}</b>. <br /> Please visit <a href="${url}">Password Reset Verification Link</a> to reset your password.  </p>`
+    },
+    (err, info) => {
+      console.log(info.envelope);
+      console.log(info.messageId);
+    }
+  );
 };
 
 const sendVerifyAccount = (user, url) => {
@@ -84,10 +90,8 @@ const contactEmail = input => {
     if (err) {
       return "Error occured." + err.message;
     }
-
     console.log("Message sent: %s", info.messageId);
     console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-
     return "message sent";
   });
 };

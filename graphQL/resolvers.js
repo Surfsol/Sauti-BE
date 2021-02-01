@@ -107,6 +107,10 @@ module.exports = {
       // The first arg to EmailValidate becomes the returned input value
       return input;
     },
+    resetPassword(_, { input }, ctx) {
+      // The first arg to EmailValidate becomes the returned input value
+      return input;
+    },
     deleteUser(_, { input }) {
       // The first arg to DeletedUserOrError becomes the returned input value
       return input;
@@ -180,6 +184,7 @@ module.exports = {
     async __resolveType(user, ctx, info) {
       if (user.password) {
         user.password = bcrypt.hashSync(user.password, 8);
+        user.verification_code = null
       }
       user.verified_email = 1;
       const updated = await ctx.Users.updateById(user.id, user);
@@ -294,21 +299,22 @@ module.exports = {
   },
   ResetPasswordOrError: {
     async __resolveType(user, ctx) {
-      const theUser = await ctx.Users.findByEmail(user.email);
-      const { id } = theUser;
+      let userObj
+      try {
+      userObj = await ctx.Users.findByEmail(user.email);
+      } catch(e){
+        return e
+      }
+      const { id, email } = userObj;
+      let userUpdate = {id:id, email:email}
       // generating token that expires in 1 hour for the password URL + the token needs to have current user email on it
-      const resetTokenGeneration = generateResetToken(theUser);
+      const resetTokenGeneration = generateResetToken(userUpdate);
       const url = `https://www.databank.sautiafrica.org/password-verification/?resetToken=${resetTokenGeneration}`;
-      if (theUser) {
-        // if user exists
-        // this generates 5 random numbers
-        const generateNumber = Math.floor(Math.random() * 90000) + 10000;
-        // saving verification code to DB
-        theUser.verification_code = generateNumber;
-        // saving reset token to DB
-        theUser.resetToken = resetTokenGeneration;
-        ctx.Users.updateById(id, theUser);
-        await sendResetPasswordEmail(theUser, generateNumber, url);
+      if (userObj) {
+        let generateNumber = Math.floor(Math.random() * 90000) + 10000;
+        userUpdate.verification_code = generateNumber;
+        await ctx.Users.updateById(id, userUpdate);
+        await sendResetPasswordEmail(userUpdate, generateNumber, url);
         return "DatabankUser";
       } else {
         let error = user;
