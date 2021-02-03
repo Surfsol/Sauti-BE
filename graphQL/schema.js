@@ -60,6 +60,7 @@ const typeDefs = gql`
     paypal_plan: String
     verification_code: Int
     resetToken: String
+    verified_email: Boolean
   }
 
   type NodeEmail {
@@ -68,8 +69,6 @@ const typeDefs = gql`
     nature: String
     message: String
   }
-
-
 
   enum FoundBy {
     CROSS_BORDER_ASSOCIATION
@@ -102,8 +101,8 @@ const typeDefs = gql`
   union UpdateUserToExpired = DatabankUser | Error
   union AddPaypalPlanOrError = DatabankUser | Error
   union ResetPasswordOrError = DatabankUser | Error
-
-  
+  union EmailValidate = DatabankUser | Error
+  union PasswordReset = DatabankUser | Error
 
   input emailContactInput {
     name: String
@@ -161,6 +160,7 @@ const typeDefs = gql`
     country: String
     organization_type: OrganizationType
     subscription_id: String
+    verified_email: Boolean
   }
 
   input newUpdateUserToExpiredInput {
@@ -212,15 +212,18 @@ const typeDefs = gql`
     databankUsers: [DatabankUser]!
     databankUser(input: Email!): DatabankUser!
     getGraphLabels: JSON
-    
   }
 
   type Mutation {
     register(input: newRegisterInput!): DatabankUser!
     login(input: newLoginInput!): DatabankUser!
     editUser(input: newEditUserInput!): EditedUserOrError!
+    validateEmail(input: newEditUserInput!): EmailValidate!
+    resetPassword(input: newEditUserInput!): PasswordReset!
     deleteUser(input: newDeleteUserInput!): DeletedUserOrError!
-    updateUserToExpired(input: newUpdateUserToExpiredInput!): UpdateUserToExpired!
+    updateUserToExpired(
+      input: newUpdateUserToExpiredInput!
+    ): UpdateUserToExpired!
     addPaypalPlan(input: newAddPaypalPlanInput!): AddPaypalPlanOrError!
     sendResetPassword(input: resetPasswordInput!): ResetPasswordOrError!
     emailByContact(input: emailContactInput!): NodeEmail
