@@ -1,5 +1,5 @@
 ## Project Breakdown
----
+----
 ## GraphQL 
 
 GraphQL is a API that differs from REST APIs because it uses a schema which tells what can be returned from the database, and only returns what is requested in the query. GraphQl also differs because it only exposes a single API endpoint from where all of the data can be retrieved. Our application uses the Apollo library to send queries to the back end from React. To test GraphQl, start the server on the local host and visit the `/graphql` endpoint in your browser.
