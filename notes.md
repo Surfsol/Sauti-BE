@@ -12,6 +12,7 @@ My Apps and Credentials
 Rest API Apps
 -Create App
 
+https://api-m.sandbox.paypal.com to https://api-m.paypal.com
 
 
 run cron job in Heroku
