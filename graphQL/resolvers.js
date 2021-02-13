@@ -133,7 +133,7 @@ module.exports = {
     async __resolveType(user, ctx) {
       const theUser = await ctx.Users.findByEmail(user.email);
       const { subscription_id, id } = theUser;
-      const url = "https://api.sandbox.paypal.com/v1/oauth2/token";
+      const url = "https://api-m.paypal.com/v1/oauth2/token";
       const oldData = {
         grant_type: "client_credentials"
       };
