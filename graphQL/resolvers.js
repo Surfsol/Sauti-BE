@@ -10,6 +10,9 @@ const {
   sendVerifyAccount,
   sendSuccess
 } = require("../services/EmailService");
+const {getAccessToken} = require('../services/accessToken')
+
+const paypalUrl = process.env.paypalUrl
 
 module.exports = {
   Query: {
@@ -131,41 +134,25 @@ module.exports = {
   },
   UpdateUserToExpired: {
     async __resolveType(user, ctx) {
+      console.log('in update to expired')
       const theUser = await ctx.Users.findByEmail(user.email);
       const { subscription_id, id } = theUser;
-      const url = "https://api-m.paypal.com/v1/oauth2/token";
-      const oldData = {
-        grant_type: "client_credentials"
-      };
-      const auth = {
-        username: process.env.paypalUserName,
-        password: process.env.paypalPassword
-      };
-      const options = {
-        method: "post",
-        headers: {
-          "content-type": "application/x-www-form-urlencoded",
-          "Access-Control-Allow-Credentials": true
-        },
-        data: qs.stringify(oldData),
-        auth: auth,
-        url
-      };
-      const { data } = await axios(options);
-      const { access_token } = data;
+
+      const access_token = await getAccessToken()
       axios.defaults.headers.common = {
         Authorization: `Bearer ${access_token}`
       };
-
+      console.log({access_token})
+      console.log(`${paypalUrl}v1/billing/subscriptions/${subscription_id}`)
       if (access_token) {
-        const config = {
-          headers: { Authorization: `Bearer ${access_token}` }
-        };
-
-        const users_subscription = await axios.get(
-          `https://api-m.paypal.com/v1/billing/subscriptions/${subscription_id}`
-        );
-
+        let users_subscription
+        try{
+          users_subscription = await axios.get(`${paypalUrl}v1/billing/subscriptions/${subscription_id}`);
+        } catch(e){
+          console.log(e)
+        }
+        
+        console.log({users_subscription})
         // Set the user's next_billing_time so that the cron job can cancel the user's subscription
         // once their paid period ends.
         theUser.p_next_billing_time =
@@ -182,6 +169,7 @@ module.exports = {
   },
   EditedUserOrError: {
     async __resolveType(user, ctx, info) {
+      console.log('in edit a user', user)
       if (user.password) {
         user.password = bcrypt.hashSync(user.password, 8);
         user.verification_code = null
@@ -241,49 +229,32 @@ module.exports = {
   },
   AddPaypalPlanOrError: {
     async __resolveType(user, ctx) {
+      console.log('in payplay plan or error', user)
+
       const theUser = await ctx.Users.findByEmail(user.email);
+      console.log({theUser})
       const { subscription_id, id } = theUser;
-
-      const url = "https://api-m.paypal.com/v1/oauth2/token";
-      const oldData = {
-        grant_type: "client_credentials"
-      };
-      const auth = {
-        username: process.env.PAYPAL_AUTH_USERNAME,
-        password: process.env.PAYPAL_AUTH_SECRET
-      };
-
-      const options = {
-        method: "post",
-        headers: {
-          "content-type": "application/x-www-form-urlencoded",
-          "Access-Control-Allow-Credentials": true
-        },
-        data: qs.stringify(oldData),
-        auth: auth,
-        url
-      };
-
-      const { data } = await axios(options);
-      const { access_token } = data;
+      console.log({subscription_id, id})
+      
+      const access_token = await getAccessToken()
       axios.defaults.headers.common = {
-        Authorization: `Bearer ${access_token}`
+        Authorization: `Bearer ${access_token}`,
+        'Content-Type': 'application/json'
       };
-
+      console.log({access_token})
       if (access_token) {
-        const config = {
-          headers: { Authorization: `Bearer ${access_token}` }
-        };
-
+     
+       try{
         const users_subscription = await axios.get(
-          `https://api-m.paypal.com/v1/billing/subscriptions/${subscription_id}`
+          `${paypalUrl}v1/billing/subscriptions/${subscription_id}`
         );
-
+        console.log('add paypal plan or error 287', users_subscription)
         const userPlanID = users_subscription.data.plan_id;
 
         const users_planIdInformation = await axios.get(
-          `https://api-m.paypal.com/v1/billing/plans/${userPlanID}`
+          `${paypalUrl}v1/billing/plans/${userPlanID}`
         );
+        console.log({users_planIdInformation})
         const planIDName = users_planIdInformation.data.name;
         // Adding plan id name into the DB
 
@@ -291,6 +262,9 @@ module.exports = {
         await ctx.Users.updateById(id, theUser);
 
         return "DatabankUser";
+       } catch(err){
+         console.log(err)
+       }
       } else {
         let error = user;
         error.message = "There has been a problem";
