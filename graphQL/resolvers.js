@@ -134,7 +134,6 @@ module.exports = {
   },
   UpdateUserToExpired: {
     async __resolveType(user, ctx) {
-      console.log('in update to expired')
       const theUser = await ctx.Users.findByEmail(user.email);
       const { subscription_id, id } = theUser;
 
@@ -142,8 +141,6 @@ module.exports = {
       axios.defaults.headers.common = {
         Authorization: `Bearer ${access_token}`
       };
-      console.log({access_token})
-      console.log(`${paypalUrl}v1/billing/subscriptions/${subscription_id}`)
       if (access_token) {
         let users_subscription
         try{
@@ -151,8 +148,7 @@ module.exports = {
         } catch(e){
           console.log(e)
         }
-        
-        console.log({users_subscription})
+
         // Set the user's next_billing_time so that the cron job can cancel the user's subscription
         // once their paid period ends.
         theUser.p_next_billing_time =
@@ -169,7 +165,6 @@ module.exports = {
   },
   EditedUserOrError: {
     async __resolveType(user, ctx, info) {
-      console.log('in edit a user', user)
       if (user.password) {
         user.password = bcrypt.hashSync(user.password, 8);
         user.verification_code = null
@@ -229,32 +224,25 @@ module.exports = {
   },
   AddPaypalPlanOrError: {
     async __resolveType(user, ctx) {
-      console.log('in payplay plan or error', user)
-
       const theUser = await ctx.Users.findByEmail(user.email);
-      console.log({theUser})
       const { subscription_id, id } = theUser;
-      console.log({subscription_id, id})
       
       const access_token = await getAccessToken()
       axios.defaults.headers.common = {
         Authorization: `Bearer ${access_token}`,
         'Content-Type': 'application/json'
       };
-      console.log({access_token})
       if (access_token) {
      
        try{
         const users_subscription = await axios.get(
           `${paypalUrl}v1/billing/subscriptions/${subscription_id}`
         );
-        console.log('add paypal plan or error 287', users_subscription)
         const userPlanID = users_subscription.data.plan_id;
 
         const users_planIdInformation = await axios.get(
           `${paypalUrl}v1/billing/plans/${userPlanID}`
         );
-        console.log({users_planIdInformation})
         const planIDName = users_planIdInformation.data.name;
         // Adding plan id name into the DB
 
