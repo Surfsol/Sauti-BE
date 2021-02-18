@@ -30,7 +30,7 @@ const job = async function() {
       }
     } = await catchErrors(
       axios.get(
-        `https://api.sandbox.paypal.com/v1/billing/subscriptions/${subscriber.subscription_id}`,
+        `https://api-m.paypal.com/v1/billing/subscriptions/${subscriber.subscription_id}`,
         tokenCache
       ),
       err =>
@@ -47,7 +47,7 @@ const job = async function() {
       // Cancel the users' subscriptions
       await catchErrors(
         axios.post(
-          `https://api.sandbox.paypal.com/v1/billing/subscriptions/${subscriber.subscription_id}/cancel`,
+          `https://api-m.paypal.com/v1/billing/subscriptions/${subscriber.subscription_id}/cancel`,
           tokenCache
         ),
         err => console.error("Error cancelling the subscription", err)
@@ -73,7 +73,7 @@ function formatDate(date) {
 }
 
 async function getAuthCreds() {
-  const url = "https://api.sandbox.paypal.com/v1/oauth2/token";
+  const url = "https://api-m.paypal.com/v1/oauth2/token";
 
   const oldData = {
     grant_type: "client_credentials"

@@ -133,7 +133,7 @@ module.exports = {
     async __resolveType(user, ctx) {
       const theUser = await ctx.Users.findByEmail(user.email);
       const { subscription_id, id } = theUser;
-      const url = "https://api.sandbox.paypal.com/v1/oauth2/token";
+      const url = "https://api-m.paypal.com/v1/oauth2/token";
       const oldData = {
         grant_type: "client_credentials"
       };
@@ -163,7 +163,7 @@ module.exports = {
         };
 
         const users_subscription = await axios.get(
-          `https://api.sandbox.paypal.com/v1/billing/subscriptions/${subscription_id}`
+          `https://api-m.paypal.com/v1/billing/subscriptions/${subscription_id}`
         );
 
         // Set the user's next_billing_time so that the cron job can cancel the user's subscription
@@ -244,7 +244,7 @@ module.exports = {
       const theUser = await ctx.Users.findByEmail(user.email);
       const { subscription_id, id } = theUser;
 
-      const url = "https://api.sandbox.paypal.com/v1/oauth2/token";
+      const url = "https://api-m.paypal.com/v1/oauth2/token";
       const oldData = {
         grant_type: "client_credentials"
       };
@@ -276,13 +276,13 @@ module.exports = {
         };
 
         const users_subscription = await axios.get(
-          `https://api.sandbox.paypal.com/v1/billing/subscriptions/${subscription_id}`
+          `https://api-m.paypal.com/v1/billing/subscriptions/${subscription_id}`
         );
 
         const userPlanID = users_subscription.data.plan_id;
 
         const users_planIdInformation = await axios.get(
-          `https://api.sandbox.paypal.com/v1/billing/plans/${userPlanID}`
+          `https://api-m.paypal.com/v1/billing/plans/${userPlanID}`
         );
         const planIDName = users_planIdInformation.data.name;
         // Adding plan id name into the DB
