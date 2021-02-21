@@ -8,9 +8,11 @@ const {
   sendResetPasswordEmail,
   contactEmail,
   sendVerifyAccount,
-  sendSuccess
+  sendSuccess,
+  sendAccountCancellation,
 } = require("../services/EmailService");
 const { getAccessToken } = require("../services/accessToken");
+const moment = require('moment')
 
 module.exports = {
   Query: {
@@ -169,6 +171,12 @@ module.exports = {
         if (userCancelled.data.status === "CANCELLED") {
           theUser.p_next_billing_time =
             users_subscription.data.billing_info.next_billing_time;
+
+            let mDate = moment(Number(users_subscription.data.billing_info.next_billing_time));
+            const expDate = mDate.format("M/D/YYYY")
+            // email cancellation notice
+            sendAccountCancellation(user.email, expDate)
+
         }
         let error = user;
         await ctx.Users.updateById(id, theUser);

@@ -25,6 +25,22 @@ const sendResetPasswordEmail = (user, code, url) => {
   );
 };
 
+const sendAccountCancellation = (email, cancelDate) => {
+  transporter.sendMail(
+    {
+      from: "Databank Sauti Africa <tradeinsights.sautiafrica@gmail.com>",
+      to: `${email}`,
+      subject: "Subscription Cancellation - NO REPLY",
+      text: "For clients with plaintext support only",
+      html: `<p>Hello ${email}, <br /> You have cancelled your subscription, your Premium Access will expire on ${cancelDate}.</p>`
+    },
+    (err, info) => {
+      console.log(info.envelope);
+      console.log(info.messageId);
+    }
+  );
+};
+
 const sendVerifyAccount = (user, url) => {
   transporter.sendMail({
     from: "Databank Sauti Africa <tradeinsights.sautiafrica@gmail.com>",
@@ -101,4 +117,5 @@ module.exports = {
   sendVerifyAccount,
   sendResetPasswordEmail,
   contactEmail,
+  sendAccountCancellation,
 };
