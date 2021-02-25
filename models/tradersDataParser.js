@@ -160,6 +160,7 @@ try {
         if (tradersDictionary[value]) {
           arrayWithEducation.map(user => {
             if (user.cell_num === num) {
+              educationVar+=1
               user.education = tradersDictionary[value];
             }
           });
@@ -180,6 +181,7 @@ try {
         if (tradersDictionary[value]) {
           arrayWithCrossingFreq.map(user => {
             if (user.cell_num === num) {
+              borderCrossingVar+=1
               user.crossing_freq = tradersDictionary[value];
             }
           });
@@ -313,9 +315,7 @@ try {
       if (element.data.includes("survey-1-border")) {
         const unSerialData = unserializer.unserialize(element.data);
         let value;
-        if (!unSerialData["survey-1-border"]) {
-          value = unSerialData["survey-1-borderexp"]["0"];
-        } else {
+        if (unSerialData["survey-1-border"]) {
           value = unSerialData["survey-1-border"]["0"];
           if (tradersDictionary[value]) {
             borderLocationVar += 1;
@@ -351,9 +351,9 @@ try {
     try {
       console.log("\n** TRADERS TABLE **\n", Date(Date.now().toString()));
       // THIS DELETES ALL ENTRIES IN TABLE - COMMENT OUT THIS LINE WHEN TESTING
-      db.truncateTable("traders");
+      //db.truncateTable("traders");
       // THIS INSERTS ~11,000 ENTRIES INTO TABLE - COMMENT OUT THIS LINE WHEN TESTING
-      db.batchInsert("traders", arrayWithCrossingLocation);
+      //db.batchInsert("traders", arrayWithCrossingLocation);
     } catch {
       console.log("Failed to batch insert");
     }
