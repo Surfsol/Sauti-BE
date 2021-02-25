@@ -1,7 +1,21 @@
 require("dotenv").config();
 let unserializer = require("php-unserialize");
+const { tradersDictionary } = require("./tradersDataDictionary");
 
 const db = require("./model");
+
+let cor = 0;
+let ageVar = 0;
+let borderCrossingVar = 0;
+let borderLocationVar = 0;
+let educationVar = 0;
+let genderVar = 0;
+let languageVar = 0;
+let primaryVar = 0;
+let growVar = 0;
+let apostrophe = 0;
+let allgender = 0;
+let noComma = 0;
 
 // tradersDataParser.js withdraws user information from PHP serialized data in `platform_sessions2` table in database
 // Many users have submit more than one request so there are ~80,000 entries in `platform_sessions2` but only ~11,000 users in `traders` table
@@ -51,31 +65,44 @@ try {
   // gender, age, education, crossing frequency, produce, primary income, language, and country of residence
   getGender = (sessions, distinctUsers) => {
     let arrayWithGender = distinctUsers;
-
     sessions.map(element => {
       let num = element.cell_num;
       if (
-        element.data.includes("Male") ||
-        element.data.includes("Kiume") ||
-        element.data.includes("Gabo")
+        element.data.includes("survey-1-gender") ||
+        element.data.includes("TMEA_Gender") ||
+        element.data.includes("survey-id20-gender")
       ) {
-        arrayWithGender.map(user => {
-          if (user.cell_num === num) {
-            user.gender = "Male";
-          }
-        });
-      } else if (
-        element.data.includes("Female") ||
-        element.data.includes("Kike") ||
-        element.data.includes("Musajja") ||
-        element.data.includes("Mukazi") ||
-        element.data.includes("Gore")
-      ) {
-        arrayWithGender.map(user => {
-          if (user.cell_num === num) {
-            user.gender = "Female";
-          }
-        });
+        allgender += 1;
+        const unSerialData = unserializer.unserialize(element.data);
+        let value;
+        if (unSerialData["survey-1-gender"]) {
+          value = unSerialData["survey-1-gender"]["0"];
+          genderVar += 1;
+          arrayWithGender.map(user => {
+            if (user.cell_num === num) {
+              user.gender = tradersDictionary[value];
+            }
+          });
+        } else if (
+          unSerialData["TMEA_Gender"]
+          //tradersDictionary.unSerialData["TMEA_Gender"]["0"]
+        ) {
+          genderVar += 1;
+          value = unSerialData["TMEA_Gender"]["0"];
+          arrayWithGender.map(user => {
+            if (user.cell_num === num) {
+              user.gender = tradersDictionary[value];
+            }
+          });
+        } else if (unSerialData["survey-id20-gender"]) {
+          genderVar += 1;
+          value = unSerialData["survey-id20-gender"]["0"];
+          arrayWithGender.map(user => {
+            if (user.cell_num === num) {
+              user.gender = tradersDictionary[value];
+            }
+          });
+        }
       }
     });
 
@@ -87,42 +114,36 @@ try {
 
     sessions.map(element => {
       let num = element.cell_num;
-      if (element.data.includes("10-20")) {
-        arrayWithAge.map(user => {
-          if (user.cell_num === num) {
-            user.age = "<20";
+      if (element.data.includes("survey-1-age")) {
+        const unSerialData = unserializer.unserialize(element.data);
+        if (unSerialData["survey-1-age"]["0"] !== undefined) {
+          ageVar += 1;
+          let value = unSerialData["survey-1-age"]["0"];
+          switch (value) {
+            case "10-20":
+              value = "<20";
+              break;
+            case "20-30":
+              value = "21-30";
+              break;
+            case "30-40":
+              value = "31-40";
+              break;
+            case "40-50":
+              value = "41-50";
+              break;
+            case "60-70":
+              value = ">60";
+              break;
+            default:
+              break;
           }
-        });
-      } else if (element.data.includes("20-30")) {
-        arrayWithAge.map(user => {
-          if (user.cell_num === num) {
-            user.age = "21-30";
-          }
-        });
-      } else if (element.data.includes("30-40")) {
-        arrayWithAge.map(user => {
-          if (user.cell_num === num) {
-            user.age = "31-40";
-          }
-        });
-      } else if (element.data.includes("40-50")) {
-        arrayWithAge.map(user => {
-          if (user.cell_num === num) {
-            user.age = "41-50";
-          }
-        });
-      } else if (element.data.includes("50-60")) {
-        arrayWithAge.map(user => {
-          if (user.cell_num === num) {
-            user.age = "51-60";
-          }
-        });
-      } else if (element.data.includes("60-70")) {
-        arrayWithAge.map(user => {
-          if (user.cell_num === num) {
-            user.age = ">60";
-          }
-        });
+          arrayWithAge.map(user => {
+            if (user.cell_num === num) {
+              user.age = value;
+            }
+          });
+        }
       }
     });
 
@@ -131,53 +152,18 @@ try {
 
   getEducation = (sessions, arrayWithAge) => {
     let arrayWithEducation = arrayWithAge;
-
     sessions.map(element => {
       let num = element.cell_num;
-      if (
-        element.data.includes("No formal education") ||
-        element.data.includes("Ssaasomako") ||
-        element.data.includes("Sikuenda shuleni") ||
-        element.data.includes("Nta mashuri")
-      ) {
-        arrayWithEducation.map(user => {
-          if (user.cell_num === num) {
-            user.education = "No formal education";
-          }
-        });
-      } else if (
-        element.data.includes("Primary") ||
-        element.data.includes("Shule ya Msingi") ||
-        element.data.includes("Pulayimale") ||
-        element.data.includes("Abanza")
-      ) {
-        arrayWithEducation.map(user => {
-          if (user.cell_num === num) {
-            user.education = "Primary";
-          }
-        });
-      } else if (
-        element.data.includes("Secondary") ||
-        element.data.includes("Shule ya Upili") ||
-        element.data.includes("Siniya") ||
-        element.data.includes("Ayisumbuye")
-      ) {
-        arrayWithEducation.map(user => {
-          if (user.cell_num === num) {
-            user.education = "Secondary";
-          }
-        });
-      } else if (
-        element.data.includes("University/College") ||
-        element.data.includes("Chuo Kikuu/Chuo") ||
-        element.data.includes("Yunivasite/Ttendekero") ||
-        element.data.includes("Kaminuza")
-      ) {
-        arrayWithEducation.map(user => {
-          if (user.cell_num === num) {
-            user.education = "University/College";
-          }
-        });
+      if (element.data.includes("survey-1-education")) {
+        const unSerialData = unserializer.unserialize(element.data);
+        let value = unSerialData["survey-1-education"]["0"];
+        if (tradersDictionary[value]) {
+          arrayWithEducation.map(user => {
+            if (user.cell_num === num) {
+              user.education = tradersDictionary[value];
+            }
+          });
+        }
       }
     });
 
@@ -186,94 +172,36 @@ try {
 
   getCrossingFreq = (sessions, arrayWithEducation) => {
     let arrayWithCrossingFreq = arrayWithEducation;
-
     sessions.map(element => {
       let num = element.cell_num;
-      if (
-        element.data.includes("Never") ||
-        element.data.includes("Ssiyitangayo") ||
-        element.data.includes("Sijawai") ||
-        element.data.includes("Nta na rimwe")
-      ) {
-        arrayWithCrossingFreq.map(user => {
-          if (user.cell_num === num) {
-            user.crossing_freq = "Never";
-          }
-        });
-      } else if (
-        element.data.includes("Monthly") ||
-        element.data.includes("Kila mwezi") ||
-        element.data.includes("Buli mwezi") ||
-        element.data.includes("Buri kwezi")
-      ) {
-        arrayWithCrossingFreq.map(user => {
-          if (user.cell_num === num) {
-            user.crossing_freq = "Monthly";
-          }
-        });
-      } else if (
-        element.data.includes("Weekly") ||
-        element.data.includes("Buli wiiki") ||
-        element.data.includes("Kila wiki") ||
-        element.data.includes("Buri cyumweru")
-      ) {
-        arrayWithCrossingFreq.map(user => {
-          if (user.cell_num === num) {
-            user.crossing_freq = "Weekly";
-          }
-        });
-      } else if (
-        element.data.includes("Daily") ||
-        element.data.includes("Kila siku") ||
-        element.data.includes("Buri munsi") ||
-        element.data.includes("Buli lunaku")
-      ) {
-        arrayWithCrossingFreq.map(user => {
-          if (user.cell_num === num) {
-            user.crossing_freq = "Daily";
-          }
-        });
+      if (element.data.includes("survey-1-crossingfreq")) {
+        const unSerialData = unserializer.unserialize(element.data);
+        let value = unSerialData["survey-1-crossingfreq"]["0"];
+        if (tradersDictionary[value]) {
+          arrayWithCrossingFreq.map(user => {
+            if (user.cell_num === num) {
+              user.crossing_freq = tradersDictionary[value];
+            }
+          });
+        }
       }
     });
-
     getProduce(sessions, arrayWithCrossingFreq);
   };
 
   getProduce = (sessions, arrayWithCrossingFreq) => {
     let arrayWithProduce = arrayWithCrossingFreq;
-
     sessions.map(element => {
       let num = element.cell_num;
       if (element.data.includes("survey-2-produce")) {
         const unSerialData = unserializer.unserialize(element.data);
-        if (
-          unSerialData["survey-2-produce"]["0"] === "Yes" ||
-          unSerialData["survey-2-produce"]["0"] === "Yego" ||
-          unSerialData["survey-2-produce"]["0"] === "Yee" ||
-          unSerialData["survey-2-produce"]["0"] === "Ndio"
-        ) {
+        const value = unSerialData["survey-2-produce"]["0"];
+        if (tradersDictionary[value]) {
           arrayWithProduce.map(user => {
             if (user.cell_num === num) {
-              user.produce = "Yes";
+              user.produce = tradersDictionary[value];
             }
           });
-        } else if (
-          unSerialData["survey-2-produce"]["0"] === "No" ||
-          unSerialData["survey-2-produce"]["0"] === "La" ||
-          unSerialData["survey-2-produce"]["0"] === "Nedda" ||
-          unSerialData["survey-2-produce"]["0"] === "Oya"
-        ) {
-          arrayWithProduce.map(user => {
-            if (user.cell_num === num) {
-              user.produce = "No";
-            }
-          });
-        } else {
-          console.log(
-            "Unrecorded variable survey-2-produce",
-            num,
-            unSerialData["survey-2-produce"]["0"]
-          );
         }
       }
     });
@@ -282,39 +210,18 @@ try {
 
   getPrimaryIncome = (sessions, arrayWithProduce) => {
     let arrayWithPrimaryIncome = arrayWithProduce;
-
     sessions.map(element => {
       let num = element.cell_num;
       if (element.data.includes("survey-1-primaryincome")) {
         const unSerialData = unserializer.unserialize(element.data);
-        if (
-          unSerialData["survey-1-primaryincome"]["0"] === "Yes" ||
-          unSerialData["survey-1-primaryincome"]["0"] === "Yego" ||
-          unSerialData["survey-1-primaryincome"]["0"] === "Yee" ||
-          unSerialData["survey-1-primaryincome"]["0"] === "Ndio"
-        ) {
+        const value = unSerialData["survey-1-primaryincome"]["0"];
+        if (tradersDictionary[value]) {
           arrayWithPrimaryIncome.map(user => {
             if (user.cell_num === num) {
-              user.primary_income = "Yes";
+              primaryVar += 1;
+              user.primary_income = tradersDictionary[value];
             }
           });
-        } else if (
-          unSerialData["survey-1-primaryincome"]["0"] === "No" ||
-          unSerialData["survey-1-primaryincome"]["0"] === "La" ||
-          unSerialData["survey-1-primaryincome"]["0"] === "Nedda" ||
-          unSerialData["survey-1-primaryincome"]["0"] === "Oya"
-        ) {
-          arrayWithPrimaryIncome.map(user => {
-            if (user.cell_num === num) {
-              user.primary_income = "No";
-            }
-          });
-        } else {
-          console.log(
-            "Unrecorded variable survey-1-primaryincome",
-            num,
-            unSerialData["survey-1-primaryincome"]["0"]
-          );
         }
       }
     });
@@ -324,42 +231,55 @@ try {
 
   getLanguage = (sessions, arrayWithPrimaryIncome) => {
     let arrayWithLanguage = arrayWithPrimaryIncome;
-
     sessions.map(element => {
       let num = element.cell_num;
-      if (element.data.includes("English")) {
-        arrayWithLanguage.map(user => {
-          if (user.cell_num === num) {
-            user.language = "English";
-          }
-        });
-      } else if (element.data.includes("Swahili")) {
-        arrayWithLanguage.map(user => {
-          if (user.cell_num === num) {
-            user.language = "Swahili";
-          }
-        });
-      } else if (element.data.includes("Luganda")) {
-        arrayWithLanguage.map(user => {
-          if (user.cell_num === num) {
-            user.language = "Luganda";
-          }
-        });
-      } else if (element.data.includes("Kinyarwanda")) {
-        arrayWithLanguage.map(user => {
-          if (user.cell_num === num) {
-            user.language = "Kinyarwanda";
-          }
-        });
-      } else if (element.data.includes("Lukiga")) {
-        arrayWithLanguage.map(user => {
-          if (user.cell_num === num) {
-            user.language = "Lukiga";
-          }
-        });
+      let strElement = element.data;
+      if (strElement.includes("'")) {
+        if (strElement.includes("English")) {
+          arrayWithLanguage.map(user => {
+            if (user.cell_num === num) {
+              user.language = "English";
+            }
+          });
+        } else if (strElement.includes("Swahili")) {
+          arrayWithLanguage.map(user => {
+            if (user.cell_num === num) {
+              user.language = "Swahili";
+            }
+          });
+        } else if (strElement.includes("Luganda")) {
+          arrayWithLanguage.map(user => {
+            if (user.cell_num === num) {
+              user.language = "Luganda";
+            }
+          });
+        } else if (strElement.includes("Kinyarwanda")) {
+          arrayWithLanguage.map(user => {
+            if (user.cell_num === num) {
+              user.language = "Kinyarwanda";
+            }
+          });
+        } else if (strElement.includes("Lukiga")) {
+          arrayWithLanguage.map(user => {
+            if (user.cell_num === num) {
+              user.language = "Lukiga";
+            }
+          });
+        }
+      }
+      if (strElement.includes("language") && !strElement.includes("'")) {
+        const unSerialData = unserializer.unserialize(strElement);
+        let value = unSerialData["language"]["0"];
+        if (unSerialData[value]) {
+          languageVar += 1;
+          arrayWithLanguage.map(user => {
+            if (user.cell_num === num) {
+              user.language = tradersDictionary.data;
+            }
+          });
+        }
       }
     });
-
     getCountry(sessions, arrayWithLanguage);
   };
 
@@ -369,34 +289,63 @@ try {
     arrayWithCountry.map(user => {
       let num = user.cell_num;
       if (/^254/.test(num)) {
+        cor += 1;
         user.country_of_residence = "KEN";
       } else if (/^256/.test(num)) {
+        cor += 1;
         user.country_of_residence = "UGA";
       } else if (/^250/.test(num)) {
+        cor += 1;
         user.country_of_residence = "RWA";
       } else if (/^255/.test(num)) {
+        cor += 1;
         user.country_of_residence = "TZA";
       }
     });
 
     getcrossing_location(sessions, arrayWithCountry);
   };
-
+  let arrayBorder = [];
   getcrossing_location = (sessions, arrayWithCountry) => {
     let arrayWithCrossingLocation = arrayWithCountry;
-
     sessions.map(element => {
       let num = element.cell_num;
       if (element.data.includes("survey-1-border")) {
         const unSerialData = unserializer.unserialize(element.data);
-        if (unSerialData["survey-1-border"] !== undefined) {
-          arrayWithCrossingLocation.map(user => {
-            if (user.cell_num === num) {
-              user.crossing_location = unSerialData["survey-1-border"]["0"];
-            }
-          });
+        let value;
+        if (!unSerialData["survey-1-border"]) {
+          value = unSerialData["survey-1-borderexp"]["0"];
+        } else {
+          value = unSerialData["survey-1-border"]["0"];
+          if (tradersDictionary[value]) {
+            borderLocationVar += 1;
+            arrayWithCrossingLocation.map(user => {
+              if (user.cell_num === num) {
+                arrayBorder.push(tradersDictionary[value]);
+                user.crossing_location = tradersDictionary[value];
+              }
+            });
+          }
         }
       }
+    });
+
+    let setBorder = [...new Set(arrayBorder)];
+
+    console.log({
+      cor,
+      ageVar,
+      borderCrossingVar,
+      borderLocationVar,
+      educationVar,
+      genderVar,
+      languageVar,
+      primaryVar,
+      growVar,
+      apostrophe,
+      setBorder,
+      allgender,
+      noComma
     });
 
     try {
@@ -412,3 +361,13 @@ try {
 } catch ({ message }) {
   console.log("Failed file", message);
 }
+
+// country of res: 15366
+// age :1373
+// border crossing: 1275
+// border location: 939
+// education level: 2154
+// gender : 2466
+// language:  15026
+// primary income: 1141
+// grow own: 747
