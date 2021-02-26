@@ -65,45 +65,26 @@ try {
   // gender, age, education, crossing frequency, produce, primary income, language, and country of residence
   getGender = (sessions, distinctUsers) => {
     let arrayWithGender = distinctUsers;
+    const genderKeys = ["survey-1-gender", "TMEA_Gender", "survey-id20-gender"];
+
     sessions.map(element => {
       let num = element.cell_num;
-      if (
-        element.data.includes("survey-1-gender") ||
-        element.data.includes("TMEA_Gender") ||
-        element.data.includes("survey-id20-gender")
-      ) {
-        allgender += 1;
-        const unSerialData = unserializer.unserialize(element.data);
-        let value;
-        if (unSerialData["survey-1-gender"]) {
-          value = unSerialData["survey-1-gender"]["0"];
-          genderVar += 1;
-          arrayWithGender.map(user => {
-            if (user.cell_num === num) {
-              user.gender = tradersDictionary[value];
-            }
-          });
-        } else if (
-          unSerialData["TMEA_Gender"]
-          //tradersDictionary.unSerialData["TMEA_Gender"]["0"]
-        ) {
-          genderVar += 1;
-          value = unSerialData["TMEA_Gender"]["0"];
-          arrayWithGender.map(user => {
-            if (user.cell_num === num) {
-              user.gender = tradersDictionary[value];
-            }
-          });
-        } else if (unSerialData["survey-id20-gender"]) {
-          genderVar += 1;
-          value = unSerialData["survey-id20-gender"]["0"];
-          arrayWithGender.map(user => {
-            if (user.cell_num === num) {
-              user.gender = tradersDictionary[value];
-            }
-          });
+      genderKeys.map((genderKey) => {
+        if (element.data.includes(genderKey)){
+          allgender += 1;
+          const unSerialData = unserializer.unserialize(element.data);
+          let value;
+          if (unSerialData[genderKey]) {
+            value = unSerialData[genderKey]["0"];
+            genderVar += 1;
+            arrayWithGender.map(user => {
+              if (user.cell_num === num) {
+                user.gender = tradersDictionary[value];
+              }
+            });
+          }
         }
-      }
+      });
     });
 
     getAge(sessions, arrayWithGender);
