@@ -51,7 +51,7 @@ const getDataBankUsers = () => {
 // Used for when you have 500+ entries to put into database at once
 const batchInsert = (table, rows) => {
    return db.batchInsert(table, rows, 500).then(() => {
-      return db(table).count('*').then(res => console.log("ADDED", res));
+      return db(table).count('*').then(res => console.log("ADDED", res, "Update Completed"));
    });
 }
 
