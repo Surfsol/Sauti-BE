@@ -141,7 +141,7 @@ try {
         if (tradersDictionary[value]) {
           arrayWithEducation.map(user => {
             if (user.cell_num === num) {
-              educationVar+=1
+              educationVar += 1;
               user.education = tradersDictionary[value];
             }
           });
@@ -162,7 +162,7 @@ try {
         if (tradersDictionary[value]) {
           arrayWithCrossingFreq.map(user => {
             if (user.cell_num === num) {
-              borderCrossingVar+=1
+              borderCrossingVar += 1;
               user.crossing_freq = tradersDictionary[value];
             }
           });
@@ -212,52 +212,38 @@ try {
     getLanguage(sessions, arrayWithPrimaryIncome);
   };
 
+  const optionsLanguages = [
+    "English",
+    "Swahili",
+    "Luganda",
+    "Kinyarwanda",
+    "Lukiga"
+  ];
   getLanguage = (sessions, arrayWithPrimaryIncome) => {
     let arrayWithLanguage = arrayWithPrimaryIncome;
     sessions.map(element => {
       let num = element.cell_num;
       let strElement = element.data;
-      if (strElement.includes("'")) {
-        if (strElement.includes("English")) {
-          arrayWithLanguage.map(user => {
-            if (user.cell_num === num) {
-              user.language = "English";
-            }
-          });
-        } else if (strElement.includes("Swahili")) {
-          arrayWithLanguage.map(user => {
-            if (user.cell_num === num) {
-              user.language = "Swahili";
-            }
-          });
-        } else if (strElement.includes("Luganda")) {
-          arrayWithLanguage.map(user => {
-            if (user.cell_num === num) {
-              user.language = "Luganda";
-            }
-          });
-        } else if (strElement.includes("Kinyarwanda")) {
-          arrayWithLanguage.map(user => {
-            if (user.cell_num === num) {
-              user.language = "Kinyarwanda";
-            }
-          });
-        } else if (strElement.includes("Lukiga")) {
-          arrayWithLanguage.map(user => {
-            if (user.cell_num === num) {
-              user.language = "Lukiga";
-            }
-          });
-        }
+      if (strElement.includes("'") && strElement.includes("language")) {
+        optionsLanguages.map(lang => {
+          if (strElement.includes(lang)) {
+            arrayWithLanguage.map(user => {
+              if (user.cell_num === num) {
+                user.language = lang;
+              }
+            });
+          }
+        });
       }
       if (strElement.includes("language") && !strElement.includes("'")) {
         const unSerialData = unserializer.unserialize(strElement);
         let value = unSerialData["language"]["0"];
-        if (unSerialData[value]) {
+        if (unSerialData["language"]) {
           languageVar += 1;
           arrayWithLanguage.map(user => {
             if (user.cell_num === num) {
-              user.language = tradersDictionary.data;
+              languageVar += 1;
+              user.language = value;
             }
           });
         }
@@ -268,7 +254,6 @@ try {
 
   getCountry = (sessions, arrayWithLanguage) => {
     let arrayWithCountry = arrayWithLanguage;
-
     arrayWithCountry.map(user => {
       let num = user.cell_num;
       if (/^254/.test(num)) {
