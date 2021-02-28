@@ -133,20 +133,23 @@ try {
 
   getEducation = (sessions, arrayWithAge) => {
     let arrayWithEducation = arrayWithAge;
+    const educationKeys = ["survey-1-education","survey-id20-educationlevel","TMEA_education"];
     sessions.map(element => {
       let num = element.cell_num;
-      if (element.data.includes("survey-1-education")) {
-        const unSerialData = unserializer.unserialize(element.data);
-        let value = unSerialData["survey-1-education"]["0"];
-        if (tradersDictionary[value]) {
-          arrayWithEducation.map(user => {
-            if (user.cell_num === num) {
-              educationVar += 1;
-              user.education = tradersDictionary[value];
-            }
-          });
+      educationKeys.map((educationKey) => {
+        if (element.data.includes(educationKey)) {
+          const unSerialData = unserializer.unserialize(element.data);
+          let value = unSerialData[educationKey]["0"];
+          if (tradersDictionary[value]) {
+            arrayWithEducation.map(user => {
+              if (user.cell_num === num) {
+                educationVar += 1;
+                user.education = tradersDictionary[value];
+              }
+            });
+          }
         }
-      }
+      });
     });
 
     getCrossingFreq(sessions, arrayWithEducation);
