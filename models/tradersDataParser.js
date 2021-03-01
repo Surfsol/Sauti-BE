@@ -66,19 +66,17 @@ try {
   getGender = (sessions, distinctUsers) => {
     let arrayWithGender = distinctUsers;
     const genderKeys = ["survey-1-gender", "TMEA_Gender", "survey-id20-gender"];
-
     sessions.map(element => {
       let num = element.cell_num;
-      genderKeys.map((genderKey) => {
-        if (element.data.includes(genderKey)){
+      genderKeys.map(genderKey => {
+        if (element.data.includes(genderKey)) {
           allgender += 1;
           const unSerialData = unserializer.unserialize(element.data);
-          let value;
           if (unSerialData[genderKey]) {
-            value = unSerialData[genderKey]["0"];
-            genderVar += 1;
+            let value = unSerialData[genderKey]["0"];
             arrayWithGender.map(user => {
               if (user.cell_num === num) {
+                genderVar += 1;
                 user.gender = tradersDictionary[value];
               }
             });
@@ -90,53 +88,99 @@ try {
     getAge(sessions, arrayWithGender);
   };
 
+  // getAge = (sessions, arrayWithGender) => {
+  //   let arrayWithAge = arrayWithGender;
+
+  //   sessions.map(element => {
+  //     let num = element.cell_num;
+  //     if (element.data.includes("survey-1-age")) {
+  //       const unSerialData = unserializer.unserialize(element.data);
+  //       if (unSerialData["survey-1-age"]["0"] !== undefined) {
+  //         ageVar += 1;
+  //         let value = unSerialData["survey-1-age"]["0"];
+  //         switch (value) {
+  //           case "10-20":
+  //             value = "<20";
+  //             break;
+  //           case "20-30":
+  //             value = "21-30";
+  //             break;
+  //           case "30-40":
+  //             value = "31-40";
+  //             break;
+  //           case "40-50":
+  //             value = "41-50";
+  //             break;
+  //           case "60-70":
+  //             value = ">60";
+  //             break;
+  //           default:
+  //             break;
+  //         }
+  //         arrayWithAge.map(user => {
+  //           if (user.cell_num === num) {
+  //             user.age = value;
+  //           }
+  //         });
+  //       }
+  //     }
+  //   });
+
+  //   getEducation(sessions, arrayWithAge);
+  // };
+
   getAge = (sessions, arrayWithGender) => {
     let arrayWithAge = arrayWithGender;
-
+    const keyArray = ["survey-1-age"];
     sessions.map(element => {
-      let num = element.cell_num;
-      if (element.data.includes("survey-1-age")) {
-        const unSerialData = unserializer.unserialize(element.data);
-        if (unSerialData["survey-1-age"]["0"] !== undefined) {
-          ageVar += 1;
-          let value = unSerialData["survey-1-age"]["0"];
-          switch (value) {
-            case "10-20":
-              value = "<20";
-              break;
-            case "20-30":
-              value = "21-30";
-              break;
-            case "30-40":
-              value = "31-40";
-              break;
-            case "40-50":
-              value = "41-50";
-              break;
-            case "60-70":
-              value = ">60";
-              break;
-            default:
-              break;
-          }
-          arrayWithAge.map(user => {
-            if (user.cell_num === num) {
-              user.age = value;
+      keyArray.map(key => {
+        if (element.data.includes(key)) {
+          const unSerialData = unserializer.unserialize(element.data);
+          let num = element.cell_num;
+          if (unSerialData[key]["0"] !== undefined) {
+            ageVar += 1;
+            let value = unSerialData[key]["0"];
+            switch (value) {
+              case "10-20":
+                value = "<20";
+                break;
+              case "20-30":
+                value = "21-30";
+                break;
+              case "30-40":
+                value = "31-40";
+                break;
+              case "40-50":
+                value = "41-50";
+                break;
+              case "60-70":
+                value = ">60";
+                break;
+              default:
+                break;
             }
-          });
+            arrayWithAge.map(user => {
+              if (user.cell_num === num) {
+                user.age = value;
+              }
+            });
+          }
         }
-      }
+      });
     });
-
     getEducation(sessions, arrayWithAge);
   };
 
   getEducation = (sessions, arrayWithAge) => {
     let arrayWithEducation = arrayWithAge;
-    const educationKeys = ["survey-1-education","survey-id20-educationlevel","TMEA_education"];
+    const educationKeys = [
+      "survey-1-education",
+      "survey-id20-educationlevel",
+      "TMEA_education"
+    ];
     sessions.map(element => {
       let num = element.cell_num;
-      educationKeys.map((educationKey) => {
+      educationKeys.map(educationKey => {
         if (element.data.includes(educationKey)) {
           const unSerialData = unserializer.unserialize(element.data);
           let value = unSerialData[educationKey]["0"];
@@ -157,61 +201,70 @@ try {
 
   getCrossingFreq = (sessions, arrayWithEducation) => {
     let arrayWithCrossingFreq = arrayWithEducation;
+    const crossingKeys = ["survey-1-crossingfreq"];
     sessions.map(element => {
-      let num = element.cell_num;
-      if (element.data.includes("survey-1-crossingfreq")) {
-        const unSerialData = unserializer.unserialize(element.data);
-        let value = unSerialData["survey-1-crossingfreq"]["0"];
-        if (tradersDictionary[value]) {
-          arrayWithCrossingFreq.map(user => {
-            if (user.cell_num === num) {
-              borderCrossingVar += 1;
-              user.crossing_freq = tradersDictionary[value];
-            }
-          });
+      crossingKeys.map(key => {
+        if (element.data.includes(key)) {
+          let num = element.cell_num;
+          const unSerialData = unserializer.unserialize(element.data);
+          if (unSerialData[key]) {
+            let value = unSerialData[key]["0"];
+            arrayWithCrossingFreq.map(user => {
+              if (user.cell_num === num) {
+                borderCrossingVar += 1;
+                user.crossing_freq = tradersDictionary[value];
+              }
+            });
+          }
         }
-      }
+      });
     });
     getProduce(sessions, arrayWithCrossingFreq);
   };
 
   getProduce = (sessions, arrayWithCrossingFreq) => {
     let arrayWithProduce = arrayWithCrossingFreq;
+    const keyArray = ["survey-2-produce"];
     sessions.map(element => {
-      let num = element.cell_num;
-      if (element.data.includes("survey-2-produce")) {
-        const unSerialData = unserializer.unserialize(element.data);
-        const value = unSerialData["survey-2-produce"]["0"];
-        if (tradersDictionary[value]) {
-          arrayWithProduce.map(user => {
-            if (user.cell_num === num) {
-              user.produce = tradersDictionary[value];
-            }
-          });
+      keyArray.map(key => {
+        if (element.data.includes(key)) {
+          let num = element.cell_num;
+          const unSerialData = unserializer.unserialize(element.data);
+          const value = unSerialData[key]["0"];
+          if (tradersDictionary[value]) {
+            arrayWithProduce.map(user => {
+              if (user.cell_num === num) {
+                growVar+=1
+                user.produce = tradersDictionary[value];
+              }
+            });
+          }
         }
-      }
+      });
     });
     getPrimaryIncome(sessions, arrayWithProduce);
   };
 
   getPrimaryIncome = (sessions, arrayWithProduce) => {
     let arrayWithPrimaryIncome = arrayWithProduce;
+    const keyArray = ["survey-1-primaryincome"];
     sessions.map(element => {
-      let num = element.cell_num;
-      if (element.data.includes("survey-1-primaryincome")) {
-        const unSerialData = unserializer.unserialize(element.data);
-        const value = unSerialData["survey-1-primaryincome"]["0"];
-        if (tradersDictionary[value]) {
-          arrayWithPrimaryIncome.map(user => {
-            if (user.cell_num === num) {
-              primaryVar += 1;
-              user.primary_income = tradersDictionary[value];
-            }
-          });
+      keyArray.map(key => {
+        if (element.data.includes(key)) {
+          let num = element.cell_num;
+          const unSerialData = unserializer.unserialize(element.data);
+          const value = unSerialData[key]["0"];
+          if (tradersDictionary[value]) {
+            arrayWithPrimaryIncome.map(user => {
+              if (user.cell_num === num) {
+                primaryVar += 1;
+                user.primary_income = tradersDictionary[value];
+              }
+            });
+          }
         }
-      }
+      });
     });
-
     getLanguage(sessions, arrayWithPrimaryIncome);
   };
 
@@ -232,6 +285,7 @@ try {
           if (strElement.includes(lang)) {
             arrayWithLanguage.map(user => {
               if (user.cell_num === num) {
+                apostrophe+=1
                 user.language = lang;
               }
             });
@@ -276,27 +330,28 @@ try {
 
     getcrossing_location(sessions, arrayWithCountry);
   };
+
   let arrayBorder = [];
   getcrossing_location = (sessions, arrayWithCountry) => {
     let arrayWithCrossingLocation = arrayWithCountry;
+    const borderKeys = ["survey-1-border"];
     sessions.map(element => {
-      let num = element.cell_num;
-      if (element.data.includes("survey-1-border")) {
-        const unSerialData = unserializer.unserialize(element.data);
-        let value;
-        if (unSerialData["survey-1-border"]) {
-          value = unSerialData["survey-1-border"]["0"];
-          if (tradersDictionary[value]) {
-            borderLocationVar += 1;
+      borderKeys.map(key => {
+        if (element.data.includes(key)) {
+          let num = element.cell_num;
+          const unSerialData = unserializer.unserialize(element.data);
+          if (unSerialData[key]) {
+            let value = unSerialData[key]["0"];
             arrayWithCrossingLocation.map(user => {
               if (user.cell_num === num) {
                 arrayBorder.push(tradersDictionary[value]);
+                borderLocationVar+=1
                 user.crossing_location = tradersDictionary[value];
               }
             });
           }
         }
-      }
+      });
     });
 
     let setBorder = [...new Set(arrayBorder)];
