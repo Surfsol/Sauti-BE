@@ -12,7 +12,7 @@ let transporter = nodemailer.createTransport({
 const sendResetPasswordEmail = (user, code, url) => {
   transporter.sendMail(
     {
-      from: "Databank Sauti Africa <tradeinsights.sautiafrica@gmail.com>",
+      from: "Sauti Trade Insights <tradeinsights.sautiafrica@gmail.com>",
       to: `${user.email}`,
       subject: "Code Verification - NO REPLY",
       text: "For clients with plaintext support only",
@@ -28,7 +28,7 @@ const sendResetPasswordEmail = (user, code, url) => {
 const sendAccountCancellation = (email, cancelDate) => {
   transporter.sendMail(
     {
-      from: "Databank Sauti Africa <tradeinsights.sautiafrica@gmail.com>",
+      from: "Sauti Trade Insights <tradeinsights.sautiafrica@gmail.com>",
       to: `${email}`,
       subject: "Subscription Cancellation - NO REPLY",
       text: "For clients with plaintext support only",
@@ -43,7 +43,7 @@ const sendAccountCancellation = (email, cancelDate) => {
 
 const sendVerifyAccount = (user, url) => {
   transporter.sendMail({
-    from: "Databank Sauti Africa <tradeinsights.sautiafrica@gmail.com>",
+    from: "Sauti Trade Insights <tradeinsights.sautiafrica@gmail.com>",
     to: `${user.email}`,
     subject: "Email Verification - NO REPLY",
     text: "For clients with plaintext support only",
@@ -54,7 +54,7 @@ const sendVerifyAccount = (user, url) => {
 const sendSuccess = (user, type) => {
   let subject = "";
   let html = "";
-  let contact = "https://www.databank.sautiafrica.org/contact"
+  let contact = "https://www.tradeinsights.sautiafrica.org/contact"
   switch (type) {
     case "verify":
       subject = "Email Verified - NO REPLY";
@@ -68,7 +68,7 @@ const sendSuccess = (user, type) => {
       break;
   }
   transporter.sendMail({
-    from: "Databank Sauti Africa <tradeinsights.sautiafrica@gmail.com>",
+    from: "Sauti Trade Insights <tradeinsights.sautiafrica@gmail.com>",
     to: user.email,
     subject: `${subject}`,
     text: "For clients with plaintext support only",
