@@ -79,7 +79,7 @@ module.exports = {
             password: hashedPassword
           });
           const token = generateResetToken(newlyCreatedUser);
-          const url = `https://www.databank.sautiafrica.org/email-verification/?resetToken=${token}`;
+          const url = `https://www.tradeinsights.sautiafrica.org/email-verification/?resetToken=${token}`;
           await sendVerifyAccount(input, url);
           return newlyCreatedUser;
         }
@@ -302,7 +302,7 @@ module.exports = {
       let userUpdate = { id: id, email: email };
       // generating token that expires in 1 hour for the password URL + the token needs to have current user email on it
       const resetTokenGeneration = generateResetToken(userUpdate);
-      const url = `https://www.databank.sautiafrica.org/password-verification/?resetToken=${resetTokenGeneration}`;
+      const url = `https://www.tradeinsights.sautiafrica.org/password-verification/?resetToken=${resetTokenGeneration}`;
       if (userObj) {
         let generateNumber = Math.floor(Math.random() * 90000) + 10000;
         userUpdate.verification_code = generateNumber;
