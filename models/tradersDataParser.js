@@ -272,14 +272,13 @@ try {
       if (strElement.includes("language") && !strElement.includes("'")) {
         const unSerialData = unserializer.unserialize(strElement);
         let value = unSerialData["language"]["0"];
-        if (unSerialData[value]) {
-          languageVar += 1;
+        
           arrayWithLanguage.map(user => {
             if (user.cell_num === num) {
-              user.language = tradersDictionary.data;
+              user.language = value;
             }
           });
-        }
+        
       }
     });
     getCountry(sessions, arrayWithLanguage);
