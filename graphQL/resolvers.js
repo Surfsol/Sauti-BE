@@ -10,6 +10,7 @@ const {
   sendVerifyAccount,
   sendSuccess,
   sendAccountCancellation,
+  paidAccountEmail,
 } = require("../services/EmailService");
 const { getAccessToken } = require("../services/accessToken");
 const moment = require('moment')
@@ -278,6 +279,7 @@ module.exports = {
           theUser.paypal_plan = planIDName;
           const planAdded = await ctx.Users.updateById(id, theUser);
           if (planAdded) {
+            paidAccountEmail(user, users_subscription.data.plan_id)
             return "DatabankUser";
           }
         } catch (err) {

@@ -12,7 +12,7 @@ let transporter = nodemailer.createTransport({
 const sendResetPasswordEmail = (user, code, url) => {
   transporter.sendMail(
     {
-      from: "Sauti Trade Insights <rterrydeve@gmail.com>",
+      from: "Sauti Trade Insights <tradeinsights.sautiafrica@gmail.com>",
       to: `${user.email}`,
       subject: "Code Verification - NO REPLY",
       text: "For clients with plaintext support only",
@@ -33,7 +33,7 @@ const sendAccountCancellation = (email, cancelDate) => {
     "https://docs.google.com/forms/d/e/1FAIpQLSfeKJkwkHPvNO4fJo6OJfKCNSKnWH7UhraJ8bpFdRT4loutfw/viewform?usp=sf_link";
   transporter.sendMail(
     {
-      from: "Sauti Trade Insights <rterrydeve@gmail.com>",
+      from: "Sauti Trade Insights <tradeinsights.sautiafrica@gmail.com>",
       to: `${email}`,
       subject: "Subscription Cancellation - NO REPLY",
       text: "For clients with plaintext support only",
@@ -76,12 +76,11 @@ const sendAccountCancellation = (email, cancelDate) => {
 
 const sendVerifyAccount = (user, url) => {
   transporter.sendMail({
-    from: "Sauti Trade Insights <rterrydeve@gmail.com>",
+    from: "Sauti Trade Insights <tradeinsights.sautiafrica@gmail.com>",
     to: `${user.email}`,
     subject: "Email Verification - NO REPLY",
     text: "For clients with plaintext support only",
     html: `
-    <html>
     <head>
     </head>
     <body style="padding: 20px;background-color: #f3f3f3;">
@@ -106,10 +105,37 @@ const sendVerifyAccount = (user, url) => {
     </center>
     ​
     </body>
-    </html>
     `
   });
 };
+const paidAccountEmail = (user) => {
+  transporter.sendMail({
+    from: "Sauti Trade Insights <tradeinsights.sautiafrica@gmail.com>",
+    to: user.email,
+    subject: `Welcome to Sauti Trade Insights!`,
+    text: "For clients with plaintext support only",
+    html: `<html>
+    <head>
+      
+    </head>
+    <body style="padding: 20px;background-color: #f3f3f3;">
+    <center>
+      <div style="width: 300px;border: 15px solid #025467;padding: 50px;margin: 20px;">
+        <h1 style="font-family: &quot;Roboto&quot;, sans-serif;font-size: 24px;color: #e84a34;">Premium Access Account Email Verification</h1>
+        <p style="font-family: &quot;Nunito&quot;, sans-serif
+          font-size: 14px;">Hi <name>></name></p>
+        <p style="font-family: &quot;Nunito&quot;, sans-serif
+          font-size: 14px;">Thank you for signing up for Sauti Trade Insights</p>
+        <p style="font-family: &quot;Nunito&quot;, sans-serif
+          font-size: 14px;">Thanks, The Sauti Team</p>
+        <p style="font-size: 10pt;font-family: &quot;Nunito&quot;, sans-serif
+          font-size: 14px;">*If you didn't recently attempt to create a new account with this email address, you can safely disregard this email.</p>
+      </div>
+    </center>
+    </body>
+    </html>`
+  });
+}
 
 const sendSuccess = (user, type) => {
   let subject = "";
@@ -128,7 +154,7 @@ const sendSuccess = (user, type) => {
       break;
   }
   transporter.sendMail({
-    from: "Sauti Trade Insights <rterrydeve@gmail.com>",
+    from: "Sauti Trade Insights <tradeinsights.sautiafrica@gmail.com>",
     to: user.email,
     subject: `${subject}`,
     text: "For clients with plaintext support only",
@@ -173,6 +199,7 @@ const contactEmail = input => {
 };
 
 module.exports = {
+  paidAccountEmail,
   sendSuccess,
   sendVerifyAccount,
   sendResetPasswordEmail,
