@@ -1,12 +1,38 @@
 const nodemailer = require("nodemailer");
+const { google } = require("googleapis");
+const OAuth2 = google.auth.OAuth2;
+
+const oauth2Client = new OAuth2(
+  "202010160537-npfaaahv13oo1cun4e4j3rrcp4v9kcrr.apps.googleusercontent.com", // ClientID
+  "cShJFQSx0fPZWOrUJ9WEIDtw", // Client Secret
+  "https://developers.google.com/oauthplayground" // Redirect URL
+);
+
+oauth2Client.setCredentials({
+  refresh_token:
+    "1//04Si4tlewXCaJCgYIARAAGAQSNwF-L9IrNsI6IPJe-YonQ2CqoAFKKmr-U8-YG2PLJF-xaQaQZ-m0uduWcxxM9rfdwtg_mw7utI8"
+});
+const accessToken = oauth2Client.getAccessToken();
+console.log({accessToken})
+
 let transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
+  // host: "smtp.gmail.com",
+  // port: 465,
+  // secure: true,
+  service: "gmail",
   auth: {
     user: process.env.EMAILFROM,
-    pass: process.env.PASSWORDFROM
-  }
+    type: "OAuth2",
+    clientId:
+      "202010160537-npfaaahv13oo1cun4e4j3rrcp4v9kcrr.apps.googleusercontent.com",
+    clientSecret: "cShJFQSx0fPZWOrUJ9WEIDtw",
+    refreshToken:
+      "1//04Si4tlewXCaJCgYIARAAGAQSNwF-L9IrNsI6IPJe-YonQ2CqoAFKKmr-U8-YG2PLJF-xaQaQZ-m0uduWcxxM9rfdwtg_mw7utI8",
+    accessToken: accessToken
+  },
+  tls: {
+    rejectUnauthorized: false
+  },
 });
 
 const sendResetPasswordEmail = (user, code, url) => {
@@ -108,7 +134,7 @@ const sendVerifyAccount = (user, url) => {
     `
   });
 };
-const paidAccountEmail = (user) => {
+const paidAccountEmail = user => {
   transporter.sendMail({
     from: "Sauti Trade Insights <tradeinsights.sautiafrica@gmail.com>",
     to: user.email,
@@ -135,12 +161,12 @@ const paidAccountEmail = (user) => {
     </body>
     </html>`
   });
-}
+};
 
 const sendSuccess = (user, type) => {
   let subject = "";
   let html = "";
-  let contact = "https://www.tradeinsights.sautiafrica.org/contact"
+  let contact = "https://www.tradeinsights.sautiafrica.org/contact";
   switch (type) {
     case "verify":
       subject = "Email Verified - NO REPLY";
@@ -198,11 +224,13 @@ const contactEmail = input => {
   });
 };
 
+
+
 module.exports = {
   paidAccountEmail,
   sendSuccess,
   sendVerifyAccount,
   sendResetPasswordEmail,
   contactEmail,
-  sendAccountCancellation,
+  sendAccountCancellation
 };
