@@ -10,6 +10,7 @@ const {
   sendVerifyAccount,
   sendSuccess,
   sendAccountCancellation,
+  paidAccountEmail,
 } = require("../services/EmailService");
 const { getAccessToken } = require("../services/accessToken");
 const moment = require('moment')
@@ -79,7 +80,7 @@ module.exports = {
             password: hashedPassword
           });
           const token = generateResetToken(newlyCreatedUser);
-          const url = `https://www.databank.sautiafrica.org/email-verification/?resetToken=${token}`;
+          const url = `https://www.tradeinsights.sautiafrica.org/email-verification/?resetToken=${token}`;
           await sendVerifyAccount(input, url);
           return newlyCreatedUser;
         }
@@ -278,6 +279,7 @@ module.exports = {
           theUser.paypal_plan = planIDName;
           const planAdded = await ctx.Users.updateById(id, theUser);
           if (planAdded) {
+            paidAccountEmail(user, users_subscription.data.plan_id)
             return "DatabankUser";
           }
         } catch (err) {
@@ -302,7 +304,7 @@ module.exports = {
       let userUpdate = { id: id, email: email };
       // generating token that expires in 1 hour for the password URL + the token needs to have current user email on it
       const resetTokenGeneration = generateResetToken(userUpdate);
-      const url = `https://www.databank.sautiafrica.org/password-verification/?resetToken=${resetTokenGeneration}`;
+      const url = `https://www.tradeinsights.sautiafrica.org/password-verification/?resetToken=${resetTokenGeneration}`;
       if (userObj) {
         let generateNumber = Math.floor(Math.random() * 90000) + 10000;
         userUpdate.verification_code = generateNumber;

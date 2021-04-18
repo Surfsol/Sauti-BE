@@ -70,7 +70,6 @@ try {
       let num = element.cell_num;
       genderKeys.map(genderKey => {
         if (element.data.includes(genderKey)) {
-          allgender += 1;
           const unSerialData = unserializer.unserialize(element.data);
           if (unSerialData[genderKey]) {
             let value = unSerialData[genderKey]["0"];
@@ -138,7 +137,7 @@ try {
           const unSerialData = unserializer.unserialize(element.data);
           let num = element.cell_num;
           if (unSerialData[key]["0"] !== undefined) {
-            ageVar += 1;
+         
             let value = unSerialData[key]["0"];
             switch (value) {
               case "10-20":
@@ -161,6 +160,7 @@ try {
             }
             arrayWithAge.map(user => {
               if (user.cell_num === num) {
+                ageVar += 1;
                 user.age = value;
               }
             });
@@ -296,18 +296,16 @@ try {
         const unSerialData = unserializer.unserialize(strElement);
         let value = unSerialData["language"]["0"];
         if (unSerialData["language"]) {
-          languageVar += 1;
           arrayWithLanguage.map(user => {
             if (user.cell_num === num) {
               languageVar += 1;
               user.language = value;
             }
           });
-        }
       }
-    });
-    getCountry(sessions, arrayWithLanguage);
-  };
+    }})
+    getCountry(sessions, arrayWithLanguage)
+  }
 
   getCountry = (sessions, arrayWithLanguage) => {
     let arrayWithCountry = arrayWithLanguage;
@@ -367,9 +365,9 @@ try {
       primaryVar,
       growVar,
       apostrophe,
-      setBorder,
-      allgender,
-      noComma
+    
+    
+    
     });
 
     try {
