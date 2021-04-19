@@ -146,13 +146,40 @@ try {
               case "20-30":
                 value = "21-30";
                 break;
+              case "21-30":
+                value = "21-30";
+                break;
               case "30-40":
+                value = "31-40";
+                break;
+              case "31-40":
                 value = "31-40";
                 break;
               case "40-50":
                 value = "41-50";
                 break;
+              case "41-50":
+                value = "41-50";
+                break;
+              case "50-60":
+                value = "51-60";
+                break;
+              case "51-60":
+                value = "51-60";
+                break;
               case "60-70":
+                value = ">60";
+                break;
+              case "Over 60":
+                value = ">60";
+                break;
+              case "Zaidi ya 60":
+                value = ">60";
+                break;
+              case "Nsussa 60":
+                value = ">60";
+                break;
+              case "Kibita 60":
                 value = ">60";
                 break;
               default:
