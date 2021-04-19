@@ -130,7 +130,10 @@ try {
 
   getAge = (sessions, arrayWithGender) => {
     let arrayWithAge = arrayWithGender;
-    const keyArray = ["survey-1-age"];
+    const keyArray = [
+      "survey-1-age",
+      "TMEA_Age",
+      "survey-id20-age"];
     sessions.map(element => {
       keyArray.map(key => {
         if (element.data.includes(key)) {
