@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
 const OAuth2 = google.auth.OAuth2;
-
+//console.log(process.env.emailClientId, process.env.emailClientSecret, process.env.EMAILFROM)
 const oauth2Client = new OAuth2(
   process.env.emailClientId, // ClientID
   process.env.emailClientSecret, // Client Secret
@@ -10,10 +10,11 @@ const oauth2Client = new OAuth2(
 
 oauth2Client.setCredentials({
   refresh_token:
-    "1//04Si4tlewXCaJCgYIARAAGAQSNwF-L9IrNsI6IPJe-YonQ2CqoAFKKmr-U8-YG2PLJF-xaQaQZ-m0uduWcxxM9rfdwtg_mw7utI8"
+    process.env.emailRefreshToken
 });
+//console.log({oauth2Client})
 const accessToken = oauth2Client.getAccessToken();
-console.log({accessToken})
+//console.log({accessToken})
 
 let transporter = nodemailer.createTransport({
   // host: "smtp.gmail.com",
@@ -23,8 +24,9 @@ let transporter = nodemailer.createTransport({
   auth: {
     user: process.env.EMAILFROM,
     type: "OAuth2",
-    clientId: process.env.emailClientId,
-    clientSecret: process.env.emailClientSecret,
+    clientId:
+      "202010160537-npfaaahv13oo1cun4e4j3rrcp4v9kcrr.apps.googleusercontent.com",
+    clientSecret: "cShJFQSx0fPZWOrUJ9WEIDtw",
     refreshToken:
       "1//04Si4tlewXCaJCgYIARAAGAQSNwF-L9IrNsI6IPJe-YonQ2CqoAFKKmr-U8-YG2PLJF-xaQaQZ-m0uduWcxxM9rfdwtg_mw7utI8",
     accessToken: accessToken
@@ -33,8 +35,9 @@ let transporter = nodemailer.createTransport({
     rejectUnauthorized: false
   },
 });
-
+//console.log({transporter})
 const sendResetPasswordEmail = (user, code, url) => {
+  console.log('in sendResetPasssssssssssssss', {user, code, url})
   transporter.sendMail(
     {
       from: "Sauti Trade Insights <tradeinsights.sautiafrica@gmail.com>",
