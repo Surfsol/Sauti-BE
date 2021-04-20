@@ -3,8 +3,8 @@ const { google } = require("googleapis");
 const OAuth2 = google.auth.OAuth2;
 
 const oauth2Client = new OAuth2(
-  "202010160537-npfaaahv13oo1cun4e4j3rrcp4v9kcrr.apps.googleusercontent.com", // ClientID
-  "cShJFQSx0fPZWOrUJ9WEIDtw", // Client Secret
+  process.env.emailClientId, // ClientID
+  process.env.emailClientSecret, // Client Secret
   "https://developers.google.com/oauthplayground" // Redirect URL
 );
 
@@ -23,9 +23,8 @@ let transporter = nodemailer.createTransport({
   auth: {
     user: process.env.EMAILFROM,
     type: "OAuth2",
-    clientId:
-      "202010160537-npfaaahv13oo1cun4e4j3rrcp4v9kcrr.apps.googleusercontent.com",
-    clientSecret: "cShJFQSx0fPZWOrUJ9WEIDtw",
+    clientId: process.env.emailClientId,
+    clientSecret: process.env.emailClientSecret,
     refreshToken:
       "1//04Si4tlewXCaJCgYIARAAGAQSNwF-L9IrNsI6IPJe-YonQ2CqoAFKKmr-U8-YG2PLJF-xaQaQZ-m0uduWcxxM9rfdwtg_mw7utI8",
     accessToken: accessToken
