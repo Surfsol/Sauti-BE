@@ -66,7 +66,7 @@ const sendAccountCancellation = (email, cancelDate) => {
       <body style="padding: 20px;background-color: #f3f3f3;">
         <center>
           <div style="width: 300px;border: 15px solid #025467;padding: 50px;margin: 20px;">
-            <h1 style="font-family: &quot;Roboto&quot;, sans-serif;font-size: 24px;color: #e84a34;">Two Week Trial Email Verification</h1>
+            <h1 style="font-family: &quot;Roboto&quot;, sans-serif;font-size: 24px;color: #e84a34;">Subscription Cancellation Notice</h1>
             <p style="font-family: &quot;Nunito&quot;, sans-serif
             font-size: 14px;">Hi ${email}</name></p>
             <p style="font-family: &quot;Nunito&quot;, sans-serif
@@ -76,7 +76,7 @@ const sendAccountCancellation = (email, cancelDate) => {
             <p style="font-family: &quot;Nunito&quot;, sans-serif
             font-size: 14px;">We’d like to learn the reason behind your cancellation so we can better serve our users (and hopefully you!) in the future .</p>
       
-            <button  style="color: #f3f3f3;background-color: #e84a34;font-family: &quot;Roboto&quot;, sans-serif;font-size: 20px;border-color: transparent;border-radius: 4px;text-align: center;cursor: pointer;"><a href="${link}" style="text-decoration:none">Feedback Survey</a></button>
+            <a href="${link}" style="text-decoration:none"><button  style="color: #f3f3f3;background-color: #e84a34;font-family: &quot;Roboto&quot;, sans-serif;font-size: 20px;border-color: transparent;border-radius: 4px;text-align: center;cursor: pointer;">Feedback Survey</button></a>
       
             <p style="font-family: &quot;Nunito&quot;, sans-serif
             font-size: 14px;">Thanks, The Sauti Team</p>
@@ -116,7 +116,7 @@ const sendVerifyAccount = (user, url) => {
         <p style="font-family: &quot;Nunito&quot;, sans-serif
           font-size: 14px;">Verify your email address to start your two week trial access. Click on the link below to verify that ${user.email} belongs to you.</p>
     ​
-        <button style="color: #f3f3f3;background-color: #e84a34;font-family: &quot;Roboto&quot;, sans-serif;font-size: 20px;border-color: transparent;border-radius: 4px;text-align: center;cursor: pointer;"><a href="${url}" style="text-decoration:none">Verify Email</a></button>
+        <a href="${url}" style="text-decoration:none"><button style="color: #f3f3f3;background-color: #e84a34;font-family: &quot;Roboto&quot;, sans-serif;font-size: 20px;border-color: transparent;border-radius: 4px;text-align: center;cursor: pointer; padding:10px;">Verify Email</button></a>
     ​
         <p style="font-family: &quot;Nunito&quot;, sans-serif
           font-size: 14px;">Thanks, The Sauti Team</p>
