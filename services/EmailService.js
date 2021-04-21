@@ -11,17 +11,15 @@ const oauth2Client = new OAuth2(
 oauth2Client.setCredentials({
   refresh_token: process.env.emailRefreshToken
 });
-//console.log({oauth2Client})
-const accessToken = oauth2Client.getAccessToken();
-console.log({accessToken})
 
+const accessToken = oauth2Client.getAccessToken();
 let transporter = nodemailer.createTransport({
-  // host: "smtp.gmail.com",
   port: 465,
   secure: true,
-  service: "sautiafrica.org",
+  service: "gmail",
   auth: {
     user: process.env.EMAILFROM,
+    //pass: process.env.PASSWORDFROM,
     type: "OAuth2",
     clientId: process.env.emailClientId,
     clientSecret: process.env.emailClientSecret,
@@ -32,9 +30,8 @@ let transporter = nodemailer.createTransport({
     rejectUnauthorized: false
   },
 });
-console.log({transporter})
+
 const sendResetPasswordEmail = (user, code, url) => {
-  console.log('in sendResetPasssssssssssssss', {user, code, url})
   transporter.sendMail(
     {
       from: "Sauti Trade Insights <tradeinsights.sautiafrica@gmail.com>",
