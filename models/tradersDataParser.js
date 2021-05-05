@@ -365,8 +365,6 @@ try {
 
     try {
       console.log("\n** TRADERS TABLE **\n", Date(Date.now().toString()));
-      // THIS DELETES ALL ENTRIES IN TABLE - COMMENT OUT THIS LINE WHEN TESTING
-      db.truncateTable("traders");
       // THIS INSERTS ~11,000 ENTRIES INTO TABLE - COMMENT OUT THIS LINE WHEN TESTING
       db.batchInsert("traders", arrayWithCrossingLocation);
     } catch {
