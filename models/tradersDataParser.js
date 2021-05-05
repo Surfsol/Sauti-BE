@@ -87,47 +87,6 @@ try {
     getAge(sessions, arrayWithGender);
   };
 
-  // getAge = (sessions, arrayWithGender) => {
-  //   let arrayWithAge = arrayWithGender;
-
-  //   sessions.map(element => {
-  //     let num = element.cell_num;
-  //     if (element.data.includes("survey-1-age")) {
-  //       const unSerialData = unserializer.unserialize(element.data);
-  //       if (unSerialData["survey-1-age"]["0"] !== undefined) {
-  //         ageVar += 1;
-  //         let value = unSerialData["survey-1-age"]["0"];
-  //         switch (value) {
-  //           case "10-20":
-  //             value = "<20";
-  //             break;
-  //           case "20-30":
-  //             value = "21-30";
-  //             break;
-  //           case "30-40":
-  //             value = "31-40";
-  //             break;
-  //           case "40-50":
-  //             value = "41-50";
-  //             break;
-  //           case "60-70":
-  //             value = ">60";
-  //             break;
-  //           default:
-  //             break;
-  //         }
-  //         arrayWithAge.map(user => {
-  //           if (user.cell_num === num) {
-  //             user.age = value;
-  //           }
-  //         });
-  //       }
-  //     }
-  //   });
-
-  //   getEducation(sessions, arrayWithAge);
-  // };
-
   getAge = (sessions, arrayWithGender) => {
     let arrayWithAge = arrayWithGender;
     const keyArray = [
@@ -303,7 +262,11 @@ try {
     "Swahili",
     "Luganda",
     "Kinyarwanda",
-    "Lukiga"
+    "Lukiga",
+    "Samia",
+    "Somali",
+    "Luganda",
+    "Lugandan"
   ];
   getLanguage = (sessions, arrayWithPrimaryIncome) => {
     let arrayWithLanguage = arrayWithPrimaryIncome;
