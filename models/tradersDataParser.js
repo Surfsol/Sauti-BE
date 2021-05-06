@@ -260,7 +260,6 @@ try {
   const optionsLanguages = [
     "English",
     "Swahili",
-    "Luganda",
     "Kinyarwanda",
     "Lukiga",
     "Samia",
