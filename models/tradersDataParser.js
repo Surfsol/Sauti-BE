@@ -279,7 +279,7 @@ try {
             arrayWithLanguage.map(user => {
               if (user.cell_num === num) {
                 apostrophe+=1
-                user.language = lang;
+                user.language = tradersDictionary[lang];
               }
             });
           }
@@ -292,7 +292,7 @@ try {
           arrayWithLanguage.map(user => {
             if (user.cell_num === num) {
               languageVar += 1;
-              user.language = value;
+              user.language = tradersDictionary[value];
             }
           });
       }
