@@ -1,4 +1,6 @@
 require("dotenv").config();
+const fs = require("fs");
+
 let unserializer = require("php-unserialize");
 const { tradersDictionary } = require("./tradersDataDictionary");
 
@@ -25,7 +27,7 @@ let noComma = 0;
 // To run the file during testing, run: node ./models/tradersDataParser.js
 
 // First Lance's Data is saved in array = []
-try {
+// try {
   db.findLanceData().then(sessions => {
     let array = [];
 
@@ -58,8 +60,8 @@ try {
         });
       }
     }
-    getGender(sessions, distinctUsers);
-  });
+   getGender(sessions, distinctUsers);
+  })
 
   // These functions fill in the 'null' values in the user object:
   // gender, age, education, crossing frequency, produce, primary income, language, and country of residence
@@ -317,7 +319,6 @@ try {
         user.country_of_residence = "TZA";
       }
     });
-
     getcrossing_location(sessions, arrayWithCountry);
   };
 
@@ -342,44 +343,13 @@ try {
           }
         }
       });
+    })
+    const data = JSON.stringify(arrayWithCrossingLocation);
+    let file = "module.exports = {array :" + data + "}";
+    fs.writeFile("models/tradersData.js", file, function (err) {
+      if (err) throw err;
+      console.log("update array saved" );
     });
+  }
 
-    let setBorder = [...new Set(arrayBorder)];
 
-    console.log({
-      cor,
-      ageVar,
-      borderCrossingVar,
-      borderLocationVar,
-      educationVar,
-      genderVar,
-      languageVar,
-      primaryVar,
-      growVar,
-      apostrophe,
-    
-    
-    
-    });
-
-    try {
-      console.log("\n** TRADERS TABLE **\n", Date(Date.now().toString()));
-      // THIS INSERTS ~11,000 ENTRIES INTO TABLE - COMMENT OUT THIS LINE WHEN TESTING
-      db.batchInsert("traders", arrayWithCrossingLocation);
-    } catch {
-      console.log("Failed to batch insert");
-    }
-  };
-} catch ({ message }) {
-  console.log("Failed file", message);
-}
-
-// country of res: 15366
-// age :1373
-// border crossing: 1275
-// border location: 939
-// education level: 2154
-// gender : 2466
-// language:  15026
-// primary income: 1141
-// grow own: 747
